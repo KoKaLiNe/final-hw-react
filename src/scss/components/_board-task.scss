@@ -1,0 +1,43 @@
+.task {
+    &__type {
+        width: 100%;
+        max-width: 73px;
+        margin-right: 14px;
+    }
+
+    &__header {
+        width: 100%;
+        max-width: 527px;
+        margin-right: 14px;
+
+        & a {
+            text-decoration: none;
+            color: inherit;
+        }
+    }
+
+    &__user {
+        width: 100%;
+        max-width: 180px;
+        margin-right: 14px;
+    }
+
+    &__status {
+        width: 100%;
+        max-width: 120px;
+        margin-right: 14px;
+
+        
+    }
+
+    &__priority {
+        width: 100%;
+        max-width: 117px;
+        margin-right: 14px;
+    }
+
+    &__menu {
+        width: 100%;
+        max-width: 85px;
+    }
+}

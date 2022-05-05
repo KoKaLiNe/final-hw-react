@@ -1,0 +1,93 @@
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: end;
+    cursor: pointer;
+
+    position: relative;
+
+    &.main__user-profile {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    &-btn {
+        background-color: transparent;
+        width: 20px;
+        height: 20px;
+        line-height: 0;
+        padding: 4px 5px;
+        color: $primaryColor;
+        @include border-radius(5px);
+        border: none;
+
+        position: relative;
+    }
+
+    &-content {
+        display: none;
+        position: absolute;
+        top: 20px;
+        right: 0;
+        z-index: 10;
+
+        background-color: #FFFFFF;
+        width: 112px;
+        height: 100%;
+        min-height: 78px;
+        @include border-radius(5px);
+        box-shadow: 0px 0px 2px 2px rgba(123, 97, 255, 0.5);
+
+        overflow: hidden;
+
+        
+
+        &.main__user-list {
+            width: 136px;
+            min-height: 40px;
+            height: 40px;
+            top: 44px;
+            right: 0;
+        }
+    }
+
+    &-link {
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14px;
+        text-decoration: none;
+        color: $fontColor;
+
+        display: block;
+        padding: 3px 0 3px 4px;
+
+        &.accent {
+            color: $errorColor;
+        }
+
+        &:hover {
+            background-color: #E6E1FF;
+        }
+
+        &:active {
+            background-color: $primaryColor;
+            color: #F4F4F4;
+        }
+
+
+    }
+
+    &:hover &-content {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        text-align: start;
+    }
+
+    &:hover &-btn {
+        color: #F4F4F4;
+        background-color: $primaryColor;
+    }
+}

@@ -1,0 +1,25 @@
+.label {
+    font-family: 'Roboto', sans-serif;
+    @include font ($size: 16px, $weight: false);
+    color: #CCCCCC;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.input {
+    @include input-default;
+    resize: none;
+    width: 100%;
+
+    &::placeholder {
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        color: $labelFontColor;
+    }
+
+    &__comment {
+        max-width: 458px;
+        height: 76px;
+        margin-bottom: 10px;
+    }
+}

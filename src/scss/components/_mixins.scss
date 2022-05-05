@@ -1,0 +1,167 @@
+@mixin font ($size: false, $weight: false) {
+  @if $size {
+    font-size: $size;
+  }
+
+  @if $weight {
+    font-weight: $weight;
+  }
+}
+
+@mixin flexible () {
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin border-radius($radius) {
+  // Префиксы для:
+  -webkit-border-radius: $radius; // Chrome и Safari
+  -moz-border-radius: $radius; // Firefox
+  -ms-border-radius: $radius; // Internet Explorer
+  -o-border-radius: $radius; // Opera
+  border-radius: $radius; // Стандартный CSS
+}
+
+@mixin task-status ($bgcolor, $color, $bcolor) {
+  background-color: $bgcolor;
+  color: $color;
+  border-color: $bcolor;
+}
+
+@mixin btn-default {
+  background-color: $disabledFontColor;
+  color: $fontColor;
+  border: 1px solid $fontColor;
+
+  &:hover {
+    background-color: $defaultColorHover;
+  }
+
+  &:active {
+    background-color: $defaultColorActive;
+  }
+}
+
+@mixin btn-primary {
+  background-color: $primaryColor;
+  color: $disabledFontColor;
+  border: 1px solid $primaryColor;
+
+  &:hover {
+    background-color: $primaryColorHover;
+  }
+
+  &:active {
+    background-color: $primaryColorActive;
+  }
+}
+
+@mixin btn-success {
+  background-color: $successColor;
+  color: $disabledFontColor;
+  border: 1px solid $successColor;
+
+  &:hover {
+    background-color: $successColorHover;
+  }
+
+  &:active {
+    background-color: $successColorActive;
+  }
+}
+
+@mixin btn-error {
+  background-color: $errorColor;
+  color: $disabledFontColor;
+  border: 1px solid $errorColor;
+
+  &:hover {
+    background-color: $errorColorHover;
+  }
+
+  &:active {
+    background-color: $errorColorActive;
+  }
+}
+
+@mixin btn-disabled {
+  background-color: $innerShadowColor;
+  color: $labelFontColor;
+  border: 1px solid $innerShadowColor;
+}
+
+@mixin btn-link {
+  background-color: transparent;
+  color: inherit;
+  border: none;
+
+  &:hover {
+    background-color: transparent;
+  }
+
+  &:active {
+    background-color: transparent;
+  }
+}
+
+@mixin input-default {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 5px 10px;
+  box-shadow: inset 0 0 2px #b5b5b5;
+  border: 1px solid transparent;
+  color: $fontColor;
+  @include border-radius(5px);
+
+  &::placeholder {
+    font-size: 14px;
+    color: $labelFontColor;
+  }
+
+  &:hover {
+    border: 1px solid $primaryColor;
+  }
+
+  &:focus {
+    border: 1px solid $primaryColor;
+    outline: none;
+    box-shadow: 0 0 2px rgba(123, 97, 255, 0.5);
+
+    // &:invalid {
+    //   border: 1px solid $errorColor;
+    //   outline: none;
+    //   box-shadow: 0 0 2px rgba(255, 97, 97, 0.5);
+    // }
+
+    // &:valid {
+    //   border: 1px solid $successColor;
+    //   outline: none;
+    //   box-shadow: 0 0 2px rgba(97, 255, 151, 0.5);
+    // }
+  }
+
+  // &:valid {
+  //   &:hover {
+  //     border: 1px solid $successColor;
+  //   }
+
+  //   &:focus {
+  //     border: 1px solid $successColor;
+  //     outline: none;
+  //     box-shadow: 0 0 2px rgba(97, 255, 151, 0.5);
+  //   }
+  // }
+  
+  // &:invalid {
+  //   &:hover {
+  //     border: 1px solid $errorColor;
+  //   }
+
+  //   &:focus {
+  //     border: 1px solid $errorColor;
+  //     outline: none;
+  //     box-shadow: 0 0 2px rgba(255, 97, 97, 0.5);
+  //   }
+  // }
+
+}
