@@ -38,6 +38,19 @@ export const tasks = [
     status: "complete",
     rank: "medium"
   },
+  {
+    id: "6273f176d09b551dca8762ag",
+    userId: "6273dd20d09b551dca8762a5",
+    assignedId: "6273d123",
+    title: "Задача 3",
+    description: "gocodinghard",
+    type: "task",
+    dateOfCreation: "2022-05-05T15:47:02.805Z",
+    dateOfUpdate: "2022-05-05T15:47:02.805Z",
+    timeInMinutes: 0,
+    status: "complete",
+    rank: "medium"
+  },
 ];
 
 export const users = [
@@ -63,6 +76,6 @@ export const users = [
     password: "123",
     username: "Даша Холина",
     about: "",
-    photoUrl: ""
+    photoUrl: "../../../public/img/profile-img.png"
   },
 ]

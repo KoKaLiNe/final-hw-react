@@ -9,12 +9,12 @@ const Header = () => {
     const { id } = useParams();
 
     const mainHeader = () => {
-        if (pathname === AppRoute.TASK_LIST || id || pathname === AppRoute.USERS || pathname === AppRoute.ADD) {
+        if (pathname === AppRoute.TASK_LIST || id || pathname === AppRoute.USER_LIST || pathname === AppRoute.ADD) {
             return (
                 <section className="main__header-wrap">
                     <div className="main__header-group-link">
-                        <Link to={AppRoute.TASK_LIST} className={`main__lnk  task-lnk  ${(pathname === AppRoute.TASK_LIST || id || pathname === AppRoute.ADD) && 'active-lnk'}`} >Задачи</Link>
-                        <Link to={AppRoute.USERS} className={`main__lnk  user-lnk ${pathname === AppRoute.USERS && 'active-lnk'}`}>Пользователи</Link>
+                        <Link to={AppRoute.TASK_LIST} className={`main__lnk  task-lnk  ${(pathname === AppRoute.TASK_LIST || pathname === `${AppRoute.TASK_LIST}/${id}` || pathname === `${AppRoute.ADD}/${id}`) && 'active-lnk'}`} >Задачи</Link>
+                        <Link to={AppRoute.USER_LIST} className={`main__lnk  user-lnk ${(pathname === AppRoute.USER_LIST || pathname === `${AppRoute.USER_LIST}/${id}`) && 'active-lnk'}`}>Пользователи</Link>
                     </div>
                     <div className="main__user-profile  dropdown">
                         <span className="main__user-name">Малыш Грут</span>

@@ -27,32 +27,32 @@ const TaskCard = ({ tasks, users }) => {
     }
 
     return (
-        <div className="task-card__wrap">
-            <div className="task-card__col  col-1">
-                <p className="task-card__title">Исполнитель</p>
-                <p className="task-card__text">{userName}</p>
+        <div className="card__wrap">
+            <div className="card__col  col-1">
+                <p className="card__title">Исполнитель</p>
+                <p className="card__text">{userName}</p>
 
-                <p className="task-card__title">Автор задачи</p>
-                <p className="task-card__text">Доктор Ватсон (нет автозаполнения)</p>
+                <p className="card__title">Автор задачи</p>
+                <p className="card__text">Доктор Ватсон (нет автозаполнения)</p>
 
-                <p className="task-card__title">Тип запроса</p>
-                <p className="task-card__text">
+                <p className="card__title">Тип запроса</p>
+                <p className="card__text">
                     {taskType()}
                 </p>
 
-                <p className="task-card__title">Приоритет</p>
-                <p className="task-card__text">
+                <p className="card__title">Приоритет</p>
+                <p className="card__text">
                     {taskRank()}
                 </p>
 
-                <p className="task-card__title">Дата создания</p>
-                <p className="task-card__text">{currentCard.dateOfCreation}</p>
+                <p className="card__title">Дата создания</p>
+                <p className="card__text">{currentCard.dateOfCreation}</p>
 
-                <p className="task-card__title">Дата изменения</p>
-                <p className="task-card__text">{currentCard.dateOfUpdate}</p>
+                <p className="card__title">Дата изменения</p>
+                <p className="card__text">{currentCard.dateOfUpdate}</p>
 
-                <p className="task-card__title">Затрачено времени</p>
-                <p className="task-card__text">{currentCard.timeInMinutes}</p>
+                <p className="card__title">Затрачено времени</p>
+                <p className="card__text">{currentCard.timeInMinutes}</p>
 
                 <button className="btn-primary  btn">
                     Сделать запись о работе
@@ -60,18 +60,18 @@ const TaskCard = ({ tasks, users }) => {
             </div>
 
 
-            <div className="task-card__col  col-2">
-                <p className="task-card__title">Описание</p>
-                <p className="task-card__decription">
+            <div className="card__col  col-2">
+                <p className="card__title">Описание</p>
+                <p className="card__decription">
                     {currentCard.description}
                 </p>
             </div>
 
 
-            <div className="task-card__col  col-3">
-                <p className="task-card__title">Комментарии (1)</p>
+            <div className="card__col  col-3">
+                <p className="card__title">Комментарии (1)</p>
                 <form
-                    className="task-card__form"
+                    className="card__form"
                     form action="#"
                     method="post">
                     <textarea
@@ -87,16 +87,16 @@ const TaskCard = ({ tasks, users }) => {
                         type="submit">Добавить комментарий</button>
                 </form>
 
-                <div className="task-card__commets">
+                <div className="card__commets">
 
-                    <div className="task-card__comment  comment">
+                    <div className="card__comment  comment">
                         <div className="comment__title">
                             <p className="comment__user-name">Шерлок Холмс (27.03.22 17:42)</p>
                         </div>
                         <p className="comment__text">Я так не думаю</p>
                     </div>
 
-                    <div className="task-card__comment  comment">
+                    <div className="card__comment  comment">
                         <div className="comment__title">
                             <p className="comment__user-name">Малыш грут (26.03.22 12:00)</p>
                             <button className="btn__comment  btn-link  btn  currentUser">Удалить</button>

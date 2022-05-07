@@ -151,7 +151,7 @@
   //     box-shadow: 0 0 2px rgba(97, 255, 151, 0.5);
   //   }
   // }
-  
+
   // &:invalid {
   //   &:hover {
   //     border: 1px solid $errorColor;
@@ -164,4 +164,40 @@
   //   }
   // }
 
+}
+
+@mixin card {
+
+  &__wrap {
+    @include flexible;
+    font-family: 'Roboto', sans-serif;
+    height: 100%;
+  }
+
+  &__col {
+    width: 100%;
+    padding-right: 20px;
+    margin-right: 20px;
+    border-right: 1px solid #B5B5B5;
+
+    &.col-1 {
+      max-width: 320px;
+    }
+
+    // &.col-2 {
+    //   // max-width: 420px;
+    // }
+
+    // &.col-3 {
+    //   display: block;
+    // max-width: 458px;
+    // }
+
+    &:last-child {
+      height: 650px;
+      padding-right: 0;
+      margin-right: 0;
+      border-right: none;
+    }
+  }
 }

@@ -1,18 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { AppRoute } from "../../const";
 
-const User = ({ id, username }) => {
-    // function showUserName(e) {
-    //     e.preventDefault();
-    // }
-
+const UserItem = ({ id, username }) => {
     return (
         <>
             <div className="board__item">
                 <div className="user__name"
-                // onClick={showUserName}
                 >
-                    <Link to="">
+                    <Link to={`${AppRoute.USER_LIST}/${id}`}>
                         {username}
                     </Link>
                 </div>
@@ -21,4 +17,4 @@ const User = ({ id, username }) => {
     )
 }
 
-export default User;
+export default UserItem;

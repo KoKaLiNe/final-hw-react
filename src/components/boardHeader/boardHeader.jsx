@@ -25,20 +25,9 @@ const BoardHeader = ({ tasks, users }) => {
                 </div>
             </>
         )
-    } else if (pathname === AppRoute.USERS) {
-        return (
-            <>
-                <div className="board__header">
-                    <h2 className="board__header-title  user-title">Пользователи</h2>
-                </div>
-            </>
-        )
     } else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
 
-        // console.log('tasks', tasks)
         const currentTask = tasks.find(x => x.id === id);
-        // console.log('currentTask', currentTask)
-
 
         return (
             <>
@@ -61,7 +50,36 @@ const BoardHeader = ({ tasks, users }) => {
                             Удалить
                         </button>
                     </div>
+                </div>
+            </>
+        )
+    } else if (pathname === AppRoute.USER_LIST) {
+        return (
+            <>
+                <div className="board__header">
+                    <h2 className="board__header-title  user-title">Пользователи</h2>
+                </div>
+            </>
+        )
+    } else if (pathname === `${AppRoute.USER_LIST}/${id}`) {
 
+        const currentUser = users.find(x => x.id === id);
+
+        return (
+            <>
+                <div className="board__header">
+                    <h2 className="board__header-title  user-title">{currentUser.username}</h2>
+
+                    <div className="board__header-btns">
+                        <button className="btn-board__header  btn">
+                            Добавить задачу
+                        </button>
+                        <Link
+                            to={`/task-list/edit/${id}`}
+                            className="btn-board__header  btn-primary  btn">
+                            Редактировать
+                        </Link>
+                    </div>
                 </div>
             </>
         )

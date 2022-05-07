@@ -1,0 +1,58 @@
+.card {
+    height: 100%;
+
+    @include card;
+
+    &__user-img {
+        background: url(../../../public/img/profile-img.png);
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        width: 186px;
+        height: 186px;
+        @include border-radius(50%);
+        cursor: pointer;
+
+        &-wraper {
+            max-width: 190px;
+            background: conic-gradient(#FF6161, #7B61FF, #FF6161, #7B61FF, #FF6161, #7B61FF, #FF6161);
+            padding: 2px;
+            @include border-radius(50%);
+            margin-bottom: 20px;
+        }
+    }
+
+    &__title {
+        color: $labelFontColor;
+        margin-bottom: 8px;
+    }
+
+    &__text {
+        margin-bottom: 20px;
+
+        &:last-of-type {
+            margin-bottom: 5px;
+        }
+    }
+
+    &__decription {
+        margin-bottom: 20px;
+        line-height: 19px;
+        text-indent: 20px;
+    }
+
+    &__form {
+        margin-bottom: 20px;
+    }
+}
+
+.comment {
+    margin-bottom: 20px;
+
+    &__title {
+        @include flexible;
+        align-items: center;
+        color: $labelFontColor;
+        margin-bottom: 5px;
+    }
+}

@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Login from '../../pages/login/login';
 import TaskList from '../../pages/taskList/taskList';
 import UserList from '../../pages/userList/userList';
-import Task from '../../pages/edit/edit';
+// import Task from '../../pages/edit/edit';
 import Edit from '../../pages/edit/edit';
 import { AppRoute } from '../../const';
 import { observer } from 'mobx-react-lite';
@@ -27,7 +27,7 @@ const App = observer(() => {
         <Route path={AppRoute.EDIT} exact>
           <Edit />
         </Route>
-        <Route path={AppRoute.USERS} exact>
+        <Route path={AppRoute.USER} exact>
           <UserList />
         </Route>
       </Switch>

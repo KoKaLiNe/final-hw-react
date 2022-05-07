@@ -9,9 +9,9 @@
 @import './components/dropdown';
 @import './components/filter';
 @import './components/inputs';
-@import './components/taskCard';
 @import '../components/taskStatus/taskStatus';
 @import '../components/taskPriority/taskPriority';
+@import './components/card';
 
 #root {
     height: 100%;
