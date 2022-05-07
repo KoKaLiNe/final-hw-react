@@ -7,9 +7,10 @@ import UserList from '../../pages/userList/userList';
 import Task from '../../pages/edit/edit';
 import Edit from '../../pages/edit/edit';
 import { AppRoute } from '../../const';
+import { observer } from 'mobx-react-lite';
 
 
-const App = () => {
+const App = observer(() => {
   return (
     <BrowserRouter>
       <Switch>
@@ -32,6 +33,6 @@ const App = () => {
       </Switch>
     </BrowserRouter>
   );
-}
+})
 
 export default App;

@@ -2,15 +2,17 @@ import React from "react";
 import { AppRoute } from "../../const";
 import { Link } from "react-router-dom";
 import { useLocation, useParams } from "react-router-dom";
-import { tasks } from "../../moсks";
+// import { tasks } from "../../moсks";
 import TaskStatus from "../taskStatus/taskStatus";
 
-const BoardHeader = () => {
+const BoardHeader = ({ tasks, users }) => {
+
+    // console.log(tasks)
+    // console.log(users)
 
     const { pathname } = useLocation();
     const { id } = useParams();
 
-    const currentTask = tasks.find(x => x._id === id);
 
     if (pathname === AppRoute.TASK_LIST) {
         return (
@@ -21,7 +23,6 @@ const BoardHeader = () => {
                         <Link to={AppRoute.ADD} className="btn-link">Добавить задачу</Link>
                     </button>
                 </div>
-
             </>
         )
     } else if (pathname === AppRoute.USERS) {
@@ -33,11 +34,17 @@ const BoardHeader = () => {
             </>
         )
     } else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
+
+        // console.log('tasks', tasks)
+        const currentTask = tasks.find(x => x.id === id);
+        // console.log('currentTask', currentTask)
+
+
         return (
             <>
                 <div className="board__header  task-header">
                     <div className="board__header-title  task-title">
-                        <h2 className="board__header-text">{`${currentTask.header}`}</h2>
+                        <h2 className="board__header-text">{`${currentTask.title}`}</h2>
                         <TaskStatus status={currentTask.status} />
                     </div>
 

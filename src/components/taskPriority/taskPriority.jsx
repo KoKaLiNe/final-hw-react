@@ -1,7 +1,7 @@
 import React from "react";
 
-const TaskPriority = ({ priority }) => {
-    if (priority === 'Низкий') {
+const TaskPriority = ({ rank }) => {
+    if (rank === 'low') {
         return (
             <div className="task-prioirity  low">
                 <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,7 +11,7 @@ const TaskPriority = ({ priority }) => {
                 <p>Низкий</p>
             </div>
         )
-    } else if (priority === 'Средний') {
+    } else if (rank === 'medium') {
         return (
             <div className="task-prioirity  mid">
                 <svg width="14" height="6" viewBox="0 0 14 6" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +21,7 @@ const TaskPriority = ({ priority }) => {
                 <p>Средний</p>
             </div>
         )
-    } else if (priority === 'Высокий') {
+    } else if (rank === 'high') {
         return (
             <div className="task-prioirity  high">
                 <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">

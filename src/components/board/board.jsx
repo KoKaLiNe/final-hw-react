@@ -3,13 +3,19 @@ import BoardHeader from "../boardHeader/boardHeader";
 import BoardInner from "../boardInner/boardInner";
 
 
-const Board = () => {
+const Board = ({ tasks, users }) => {
     return (
         <>
             <section className="board">
-                <BoardHeader />
+                <BoardHeader
+                    tasks={tasks}
+                    users={users}
+                />
                 <section className="board__content">
-                    <BoardInner />
+                    <BoardInner
+                        tasks={tasks}
+                        users={users}
+                    />
                 </section>
             </section>
         </>

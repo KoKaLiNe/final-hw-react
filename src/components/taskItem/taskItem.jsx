@@ -4,18 +4,13 @@ import TaskPriority from "../taskPriority/taskPriority";
 import { Link } from "react-router-dom";
 import { AppRoute } from "../../const";
 
-const TaskItem = ({ _id, type, header, userName, status, priority }) => {
+const TaskItem = ({ id, userId, assignedId, title, description, type, dateOfCreation, dateOfUpdate, timeInMinutes, status, rank, tasks, users }) => {
+
+    // const currentTask = tasks.find(x => x.id === id);
+    const userName = users.find(x => x.id === userId).username
 
     const taskType = () => {
-        if (type === false) {
-            return (
-                <img src="./img/icons/type-ok.svg" alt="" width='24' height='24' />
-            )
-        } else {
-            return (
-                <img src="./img/icons/type-bug.svg" alt="" width='24' height='24' />
-            )
-        }
+        return type === 'task' ? <img src="./img/icons/type-ok.svg" alt="" width='24' height='24' /> : <img src="./img/icons/type-bug.svg" alt="" width='24' height='24' />
     }
 
     return (
@@ -24,18 +19,20 @@ const TaskItem = ({ _id, type, header, userName, status, priority }) => {
                 {taskType()}
             </div>
             <div className="task__header">
-                <Link to={`${AppRoute.TASK_LIST}/${_id}`}>
-                    <h3>{header}</h3>
+                <Link to={`${AppRoute.TASK_LIST}/${id}`}>
+                    <h3>{title}</h3>
                 </Link>
             </div>
             <div className="task__user">
-                <p>{userName}</p>
+                <p>
+                    {userName}
+                </p>
             </div>
             <div className="task__status">
                 <TaskStatus status={status} />
             </div>
             <div className="task__priority">
-                <TaskPriority priority={priority} />
+                <TaskPriority rank={rank} />
             </div>
             <div className="task__menu  dropdown">
                 <div className="dropdown-btn">
@@ -46,7 +43,7 @@ const TaskItem = ({ _id, type, header, userName, status, priority }) => {
                     </svg>
                 </div>
                 <div className="dropdown-content">
-                    <Link to={`/task-list/edit/${_id}`} className="dropdown-link">Редактировать</Link>
+                    <Link to={`/task-list/edit/${id}`} className="dropdown-link">Редактировать</Link>
                     <a className="dropdown-link  accent" href="#">Удалить</a>
                     <a className="dropdown-link" href="#">На тестирование</a>
                     <a className="dropdown-link" href="#">Переоткрыть</a>

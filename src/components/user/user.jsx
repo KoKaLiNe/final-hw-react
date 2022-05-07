@@ -1,18 +1,20 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const User = ({ _id, userName }) => {
-function showUserName(e) {
-    e.preventDefault();
-    console.log(userName);
-}
+const User = ({ id, username }) => {
+    // function showUserName(e) {
+    //     e.preventDefault();
+    // }
 
     return (
         <>
             <div className="board__item">
                 <div className="user__name"
-                onClick={showUserName}
+                // onClick={showUserName}
                 >
-                    {userName}
+                    <Link to="">
+                        {username}
+                    </Link>
                 </div>
             </div>
         </>

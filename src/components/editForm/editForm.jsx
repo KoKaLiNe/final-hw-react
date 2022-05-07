@@ -3,11 +3,15 @@ import { tasks } from "../../moсks";
 import { useParams } from "react-router-dom";
 
 
-const EditForm = () => {
+const EditForm = ({  users }) => {
+
+
+    console.log(tasks)
+    console.log(users)
 
     const { id } = useParams();
 
-    const currentCard = tasks.find(x => x._id === id);
+    // const currentCard = tasks.find(x => x._id === id);
 
     return (
         <div className="task-card__wrap">
@@ -31,13 +35,17 @@ const EditForm = () => {
                 </fieldset> */}
 
                 <p className="task-card__title"></p>
-                <p className="task-card__text">{currentCard.user}</p>
+                <p className="task-card__text">
+                    {/* {currentCard.user} */}
+                    </p>
 
                 <p className="task-card__title">Тип запроса</p>
                 <p className="task-card__text">Задача (нет автозаполнения)</p>
 
                 <p className="task-card__title">Приоритет</p>
-                <p className="task-card__text">{currentCard.priority}</p>
+                <p className="task-card__text">
+                    {/* {currentCard.priority} */}
+                    </p>
 
             </div>
 
@@ -45,7 +53,7 @@ const EditForm = () => {
             <div className="task-card__col  col-2">
                 <p className="task-card__title">Название</p>
                 <p className="task-card__decription">
-                    {currentCard.header}
+                    {/* {currentCard.header} */}
                 </p>
                 <p className="task-card__title">Описание</p>
                 <p className="task-card__decription">
