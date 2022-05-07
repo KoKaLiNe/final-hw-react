@@ -41,8 +41,6 @@
 
         overflow: hidden;
 
-        
-
         &.main__user-list {
             width: 136px;
             min-height: 40px;
@@ -59,9 +57,16 @@
         line-height: 14px;
         text-decoration: none;
         color: $fontColor;
-
+        background-color: #FFFFFF;
         display: block;
         padding: 3px 0 3px 4px;
+        border: none;
+        text-align: left;
+
+        & a {
+            text-decoration: none;
+            color: inherit;
+        }
 
         &.accent {
             color: $errorColor;

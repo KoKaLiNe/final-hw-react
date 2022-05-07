@@ -1,8 +1,9 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 import Header from "../../components/header/header";
 import LoginForm from "../../components/loginForm/loginForm";
 
-const Login = () => {
+const Login = observer(() => {
     return (
         <>
             <Header />
@@ -11,6 +12,6 @@ const Login = () => {
             </section>
         </>
     )
-}
+})
 
 export default Login;

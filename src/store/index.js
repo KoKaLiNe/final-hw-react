@@ -47,12 +47,9 @@ class TasksStore {
         onBecomeObserved(this, 'data', this.fetch);
     }
 
-
     *fetch() {
-        yield getTasks()
-            .then(({ data }) => {
-                this.data = data.map(task => new TaskStore(task));
-            })
+        const response = yield getTasks();
+        this.data = response.data.map(event => new TaskStore(event));
     }
 }
 
@@ -95,7 +92,7 @@ class UsersStore {
 
     *fetch() {
         const response = yield getUsers();
-        this.data = response.map(user => new UserStore(user));
+        this.data = response.map(event => new UserStore(event));
     }
 }
 

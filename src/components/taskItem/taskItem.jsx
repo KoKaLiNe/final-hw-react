@@ -3,11 +3,13 @@ import TaskStatus from "../taskStatus/taskStatus";
 import TaskPriority from "../taskPriority/taskPriority";
 import { Link } from "react-router-dom";
 import { AppRoute } from "../../const";
+import { observer } from "mobx-react-lite";
 
-const TaskItem = ({ id, userId, assignedId, title, description, type, dateOfCreation, dateOfUpdate, timeInMinutes, status, rank, tasks, users }) => {
+const TaskItem = observer(({ tasks, users, id, userId, assignedId, title, description, type, dateOfCreation, dateOfUpdate, timeInMinutes, status, rank, }) => {
 
-    // const currentTask = tasks.find(x => x.id === id);
-    const userName = users.find(x => x.id === userId).username
+    console.log('userId', userId)
+
+    // const userName = users.find(x => x.id === userId).username
 
     const taskType = () => {
         if (type === 'task') {
@@ -17,7 +19,7 @@ const TaskItem = ({ id, userId, assignedId, title, description, type, dateOfCrea
                     <circle cx="12" cy="12" r="6" fill="white" />
                 </svg>
             )
-        } else if (type === 'error') {
+        } else if (type === 'bug') {
             return (
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 5C0 2.23858 2.23858 0 5 0H19C21.7614 0 24 2.23858 24 5V19C24 21.7614 21.7614 24 19 24H5C2.23858 24 0 21.7614 0 19V5Z" fill="#EB4F4F" />
@@ -39,7 +41,7 @@ const TaskItem = ({ id, userId, assignedId, title, description, type, dateOfCrea
             </div>
             <div className="task__user">
                 <p>
-                    {userName}
+                    {/* {userName} */}
                 </p>
             </div>
             <div className="task__status">
@@ -57,15 +59,17 @@ const TaskItem = ({ id, userId, assignedId, title, description, type, dateOfCrea
                     </svg>
                 </div>
                 <div className="dropdown-content">
-                    <Link to={`/task-list/edit/${id}`} className="dropdown-link">Редактировать</Link>
-                    <a className="dropdown-link  accent" href="#">Удалить</a>
-                    <a className="dropdown-link" href="#">На тестирование</a>
-                    <a className="dropdown-link" href="#">Переоткрыть</a>
+                    <button className="dropdown-link">
+                        <Link to={`/task-list/edit/${id}`} >Редактировать</Link>
+                    </button>
+                    <button className="dropdown-link  accent">Удалить</button>
+                    <button className="dropdown-link">На тестирование</button>
+                    <button className="dropdown-link">Переоткрыть</button>
                 </div>
 
             </div>
         </div>
     )
-}
+})
 
 export default TaskItem;
