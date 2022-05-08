@@ -5,11 +5,16 @@ import { Link } from "react-router-dom";
 import { AppRoute } from "../../const";
 import { observer } from "mobx-react-lite";
 
+
 const TaskItem = observer(({ tasks, users, id, userId, assignedId, title, description, type, dateOfCreation, dateOfUpdate, timeInMinutes, status, rank, }) => {
 
-    console.log('userId', userId)
-
-    // const userName = users.find(x => x.id === userId).username
+    const userName = () => {
+        if (users.length === 0) {
+            return 'загружаем...';
+        } else if (users.length > 0) {
+            return users.find(x => x.id === userId).username;
+        }
+    }
 
     const taskType = () => {
         if (type === 'task') {
@@ -41,7 +46,7 @@ const TaskItem = observer(({ tasks, users, id, userId, assignedId, title, descri
             </div>
             <div className="task__user">
                 <p>
-                    {/* {userName} */}
+                    {userName()}
                 </p>
             </div>
             <div className="task__status">

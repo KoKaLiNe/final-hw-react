@@ -6,7 +6,6 @@ import UserItem from "../userItem/userItem";
 import TaskCard from "../taskCard/taskCard";
 import EditForm from "../editForm/editForm";
 import UserCard from "../userCard/userCard";
-// import { tasks, users } from "../../moсks";
 import { AppRoute } from "../../const";
 import { useLocation, useParams } from "react-router-dom";
 
@@ -14,7 +13,6 @@ const BoardInner = ({ tasks, users }) => {
 
     const { pathname } = useLocation();
     const { id } = useParams();
-
 
     if (pathname === AppRoute.TASK_LIST) {
         return (
@@ -50,13 +48,6 @@ const BoardInner = ({ tasks, users }) => {
             </>
         )
     } else if (pathname === `${AppRoute.USER_LIST}/${id}`) {
-        
-        console.log('tasks', tasks)
-        const currentUser = users.find(x => x.id === id);
-        console.log('currentUser', currentUser)
-        // const tasks = tasks.find(x => x.userId === id)
-        console.log('tasks', tasks)
-
         return (
             <>
                 <UserCard

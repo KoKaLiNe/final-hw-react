@@ -2,18 +2,28 @@ import React from "react";
 import { AppRoute } from "../../const";
 import { Link } from "react-router-dom";
 import { useLocation, useParams } from "react-router-dom";
-// import { tasks } from "../../moсks";
 import TaskStatus from "../taskStatus/taskStatus";
 
 const BoardHeader = ({ tasks, users }) => {
-
-    // console.log(tasks)
-    // console.log(users)
-
     const { pathname } = useLocation();
     const { id } = useParams();
 
+    // console.log('users', users)
+    // console.log('users.length', users.length)
+    
+    // const currentTask = () => {
+    //     if (tasks.length === 0) {
+        //         return 0;
+        //     } else if (tasks.length > 0) {
+    //         return tasks.find(x => x.id === id);
+    //     }
+    // }
 
+    
+    // console.log('currentTask', currentTask())
+    
+    // const currentTask = tasks.find(x => x.id === id);
+    
     if (pathname === AppRoute.TASK_LIST) {
         return (
             <>
@@ -26,15 +36,21 @@ const BoardHeader = ({ tasks, users }) => {
             </>
         )
     } else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
-
-        const currentTask = tasks.find(x => x.id === id);
-
+        
+        const currentTask = () => {
+                if (tasks.length === 0) {
+                        return 0;
+                    } else if (tasks.length > 0) {
+                    return tasks.find(x => x.id === id);
+                }
+            }
+        
         return (
             <>
                 <div className="board__header  task-header">
                     <div className="board__header-title  task-title">
-                        <h2 className="board__header-text">{`${currentTask.title}`}</h2>
-                        <TaskStatus status={currentTask.status} />
+                        <h2 className="board__header-text">{currentTask().title}</h2>
+                        <TaskStatus status={currentTask().status} />
                     </div>
 
                     <div className="board__header-btns">
@@ -63,12 +79,18 @@ const BoardHeader = ({ tasks, users }) => {
         )
     } else if (pathname === `${AppRoute.USER_LIST}/${id}`) {
 
-        const currentUser = users.find(x => x.id === id);
+        const currentUser = () => {
+            if (users.length === 0) {
+                    return 0;
+                } else if (users.length > 0) {
+                return users.find(x => x.id === id);
+            }
+        }
 
         return (
             <>
                 <div className="board__header">
-                    <h2 className="board__header-title  user-title">{currentUser.username}</h2>
+                    <h2 className="board__header-title  user-title">{currentUser().username}</h2>
 
                     <div className="board__header-btns">
                         <button className="btn-board__header  btn">

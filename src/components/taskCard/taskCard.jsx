@@ -1,36 +1,62 @@
 import React from "react";
-// import { tasks, users } from "../../moсks";
 import { useParams } from "react-router-dom";
+import moment from "moment";
 
 const TaskCard = ({ tasks, users }) => {
 
-    // console.log('tasks', tasks)
-    // console.log('users', users)
-
     const { id } = useParams();
-    
-    const currentCard = tasks.find(x => x.id === id);
-    const userName = users.find(x => x.id === currentCard.userId).username
 
-    const taskType = () => {
-        return currentCard.type === 'task' ? "Задача" : "Ошибка"
-    }
-
-    const taskRank = () => {
-        if (currentCard.rank === 'low') {
-            return ("Низкий")
-        } else if (currentCard.rank === 'medium') {
-            return ("Средний")
-        } if (currentCard.rank === 'high') {
-            return ("Высокий")
+    const currentTask = () => {
+        if (tasks.length === 0) {
+            return '...';
+        } else if (tasks.length > 0) {
+            return tasks.find(x => x.id === id);
         }
     }
+    console.log('currentTask', currentTask())
+
+    const userName = () => {
+        if ((users.length > 0) && (currentTask() !== '...')) {
+            return users.find(x => x.id === currentTask().userId).username
+        } else {
+            return '...';
+        }
+    }
+    console.log('userName', userName())
+
+    const taskType = () => {
+        if ((tasks.length > 0) && (currentTask() !== '...')) {
+            if (currentTask().type === 'task') {
+                return 'Задача'
+            } else {
+                return 'Ошибка'
+            }
+        } else {
+            return '...';
+        }
+    }
+    console.log('taskType', taskType())
+
+    const taskRank = () => {
+        if ((tasks.length > 0) && (currentTask() !== '...')) {
+            if (currentTask().rank === 'low') {
+                return ("Низкий")
+            } else if (currentTask().rank === 'medium') {
+                return ("Средний")
+            } if (currentTask().rank === 'high') {
+                return ("Высокий")
+            }
+        } else {
+            return '...';
+        }
+    }
+    console.log('taskRank', taskRank())
 
     return (
         <div className="card__wrap">
             <div className="card__col  col-1">
                 <p className="card__title">Исполнитель</p>
-                <p className="card__text">{userName}</p>
+                <p className="card__text">{userName()}</p>
 
                 <p className="card__title">Автор задачи</p>
                 <p className="card__text">Доктор Ватсон (нет автозаполнения)</p>
@@ -46,13 +72,13 @@ const TaskCard = ({ tasks, users }) => {
                 </p>
 
                 <p className="card__title">Дата создания</p>
-                <p className="card__text">{currentCard.dateOfCreation}</p>
+                <p className="card__text">{moment(currentTask().dateOfCreation).format('DD.MM.YYYY HH:MM')}</p>
 
                 <p className="card__title">Дата изменения</p>
-                <p className="card__text">{currentCard.dateOfUpdate}</p>
+                <p className="card__text">{moment(currentTask().dateOfUpdate).format('DD.MM.YYYY HH:MM')}</p>
 
                 <p className="card__title">Затрачено времени</p>
-                <p className="card__text">{currentCard.timeInMinutes}</p>
+                <p className="card__text">{currentTask().timeInMinutes}</p>
 
                 <button className="btn-primary  btn">
                     Сделать запись о работе
@@ -63,7 +89,7 @@ const TaskCard = ({ tasks, users }) => {
             <div className="card__col  col-2">
                 <p className="card__title">Описание</p>
                 <p className="card__decription">
-                    {currentCard.description}
+                    {currentTask().description}
                 </p>
             </div>
 
