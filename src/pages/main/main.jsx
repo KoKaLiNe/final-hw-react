@@ -3,7 +3,7 @@ import Header from "../../components/header/header";
 import Board from "../../components/board/board";
 import { observer } from "mobx-react-lite";
 
-const UserList = observer(({tasks, users}) => {
+const Main = observer(({tasks, users}) => {
 
     return (
         <>
@@ -16,6 +16,6 @@ const UserList = observer(({tasks, users}) => {
             </section>
         </>
     )
-})
+});
 
-export default UserList;
+export default Main;

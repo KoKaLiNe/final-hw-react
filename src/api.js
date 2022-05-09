@@ -18,3 +18,12 @@ export const getUsers = () => {
 export const getTasks = () => {
     return request(`${url}/tasks`, 'POST', { "filter": {}, "page": 0, "limit": 0 })
 }
+
+export const addTask = (data) => {
+    const taskData = {
+        ...data,
+        dateOfUpdate: new Date(),
+        timeInMinutes: 0,
+    }
+    return request(`${url}/tasks/createOrEdit`, 'PUT', taskData)
+}
