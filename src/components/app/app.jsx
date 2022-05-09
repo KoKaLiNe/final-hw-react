@@ -28,7 +28,10 @@ const App = observer(() => {
           />
         </Route>
         <Route path={AppRoute.EDIT} exact>
-          <Edit />
+          <Edit
+            tasks={tasks.data}
+            users={users.data}
+          />
         </Route>
         <Route path={AppRoute.USER} exact>
           <UserList

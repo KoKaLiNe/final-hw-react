@@ -4,26 +4,12 @@ import { Link } from "react-router-dom";
 import { useLocation, useParams } from "react-router-dom";
 import TaskStatus from "../taskStatus/taskStatus";
 
+
 const BoardHeader = ({ tasks, users }) => {
+
     const { pathname } = useLocation();
     const { id } = useParams();
 
-    // console.log('users', users)
-    // console.log('users.length', users.length)
-    
-    // const currentTask = () => {
-    //     if (tasks.length === 0) {
-        //         return 0;
-        //     } else if (tasks.length > 0) {
-    //         return tasks.find(x => x.id === id);
-    //     }
-    // }
-
-    
-    // console.log('currentTask', currentTask())
-    
-    // const currentTask = tasks.find(x => x.id === id);
-    
     if (pathname === AppRoute.TASK_LIST) {
         return (
             <>
@@ -36,15 +22,15 @@ const BoardHeader = ({ tasks, users }) => {
             </>
         )
     } else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
-        
+
         const currentTask = () => {
-                if (tasks.length === 0) {
-                        return 0;
-                    } else if (tasks.length > 0) {
-                    return tasks.find(x => x.id === id);
-                }
+            if (tasks.length === 0) {
+                return 0;
+            } else if (tasks.length > 0) {
+                return tasks.find(x => x.id === id);
             }
-        
+        }
+
         return (
             <>
                 <div className="board__header  task-header">
@@ -58,7 +44,7 @@ const BoardHeader = ({ tasks, users }) => {
                             Взять в работу
                         </button>
                         <Link
-                            to={`/task-list/edit/${id}`}
+                            to={`/edit/${id}`}
                             className="btn-board__header  btn-primary  btn">
                             Редактировать
                         </Link>
@@ -81,8 +67,8 @@ const BoardHeader = ({ tasks, users }) => {
 
         const currentUser = () => {
             if (users.length === 0) {
-                    return 0;
-                } else if (users.length > 0) {
+                return 0;
+            } else if (users.length > 0) {
                 return users.find(x => x.id === id);
             }
         }
@@ -101,6 +87,24 @@ const BoardHeader = ({ tasks, users }) => {
                             className="btn-board__header  btn-primary  btn">
                             Редактировать
                         </Link>
+                    </div>
+                </div>
+            </>
+        )
+    } else if (pathname === AppRoute.ADD) {
+        return (
+            <>
+                <div className="board__header">
+                    <h2 className="board__header-title  user-title">Создание</h2>
+                    <div className="board__header-btns">
+                        <Link
+                            to='#'
+                            className="btn-board__header  btn-primary  btn">
+                            Сохранить
+                        </Link>
+                        <button className="btn-board__header  btn-default  btn">
+                            Отмена
+                        </button>
                     </div>
                 </div>
             </>
@@ -124,26 +128,8 @@ const BoardHeader = ({ tasks, users }) => {
                 </div>
             </>
         )
-    } else if (pathname === AppRoute.ADD) {
-        return (
-            <>
-                <div className="board__header">
-                    <h2 className="board__header-title  user-title">Редактирование</h2>
-
-                    <div className="board__header-btns">
-                        <Link
-                            to={`/task-list/edit/${id}`}
-                            className="btn-board__header  btn-primary  btn">
-                            Сохранить
-                        </Link>
-                        <button className="btn-board__header  btn-default  btn">
-                            Отмена
-                        </button>
-                    </div>
-                </div>
-            </>
-        )
     }
+
 
 }
 

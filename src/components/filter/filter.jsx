@@ -1,6 +1,5 @@
 import React from "react";
-import { tasks, users } from "../../moсks";
-import { useState } from "react";
+
 
 const Filter = () => {
    return (

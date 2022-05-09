@@ -8,8 +8,11 @@ import EditForm from "../editForm/editForm";
 import UserCard from "../userCard/userCard";
 import { AppRoute } from "../../const";
 import { useLocation, useParams } from "react-router-dom";
+import { observer } from "mobx-react-lite";
 
-const BoardInner = ({ tasks, users }) => {
+
+const BoardInner = observer(({ tasks, users }) => {
+   
 
     const { pathname } = useLocation();
     const { id } = useParams();
@@ -56,7 +59,7 @@ const BoardInner = ({ tasks, users }) => {
                 />
             </>
         )
-    } else if (pathname === `${AppRoute.ADD}/${id}`) {
+    } else if (pathname === AppRoute.ADD || pathname === `${AppRoute.ADD}/${id}`) {
         return (
             <>
                 <EditForm
@@ -66,6 +69,6 @@ const BoardInner = ({ tasks, users }) => {
             </>
         )
     }
-}
+})
 
 export default BoardInner;

@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 
+
 const TaskCard = ({ tasks, users }) => {
 
     const { id } = useParams();
@@ -15,14 +16,23 @@ const TaskCard = ({ tasks, users }) => {
     }
     console.log('currentTask', currentTask())
 
-    const userName = () => {
+    const userAssigned = () => {
+        if ((users.length > 0) && (currentTask() !== '...')) {
+            return users.find(x => x.id === currentTask().assignedId).username
+        } else {
+            return '...';
+        }
+    }
+    console.log('userAssigned', userAssigned())
+    
+    const userAuthor = () => {
         if ((users.length > 0) && (currentTask() !== '...')) {
             return users.find(x => x.id === currentTask().userId).username
         } else {
             return '...';
         }
     }
-    console.log('userName', userName())
+    console.log('userAuthor', userAuthor())
 
     const taskType = () => {
         if ((tasks.length > 0) && (currentTask() !== '...')) {
@@ -56,19 +66,17 @@ const TaskCard = ({ tasks, users }) => {
         <div className="card__wrap">
             <div className="card__col  col-1">
                 <p className="card__title">Исполнитель</p>
-                <p className="card__text">{userName()}</p>
+                <p className="card__text">{userAssigned()}</p>
 
                 <p className="card__title">Автор задачи</p>
-                <p className="card__text">Доктор Ватсон (нет автозаполнения)</p>
+                <p className="card__text">{userAuthor()}</p>
 
                 <p className="card__title">Тип запроса</p>
-                <p className="card__text">
-                    {taskType()}
+                <p className="card__text">{taskType()}
                 </p>
 
                 <p className="card__title">Приоритет</p>
-                <p className="card__text">
-                    {taskRank()}
+                <p className="card__text">{taskRank()}
                 </p>
 
                 <p className="card__title">Дата создания</p>

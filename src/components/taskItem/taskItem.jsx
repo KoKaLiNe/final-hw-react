@@ -65,7 +65,7 @@ const TaskItem = observer(({ tasks, users, id, userId, assignedId, title, descri
                 </div>
                 <div className="dropdown-content">
                     <button className="dropdown-link">
-                        <Link to={`/task-list/edit/${id}`} >Редактировать</Link>
+                        <Link to={`/edit/${id}`} >Редактировать</Link>
                     </button>
                     <button className="dropdown-link  accent">Удалить</button>
                     <button className="dropdown-link">На тестирование</button>

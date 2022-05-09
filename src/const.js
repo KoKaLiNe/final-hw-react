@@ -4,6 +4,6 @@ export const AppRoute = {
     TASK: '/task-list/:id?',
     USER_LIST: '/users',
     USER: '/users/:id?',
-    ADD: '/task-list/edit',
-    EDIT: '/task-list/edit/:id?',
+    ADD: '/edit',
+    EDIT: '/edit/:id?',
 }; 
