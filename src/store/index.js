@@ -1,5 +1,5 @@
 import { makeAutoObservable, onBecomeObserved } from 'mobx';
-import { getTasks, getUsers } from '../api'
+import { getTasks, getUsers, addTask } from '../api'
 
 
 // ЗАДАЧИ
@@ -50,6 +50,11 @@ class TasksStore {
     *fetch() {
         const response = yield getTasks();
         this.data = response.data.map(event => new TaskStore(event));
+    }
+
+    *addTask(data) {
+        yield addTask(data)
+        yield this.fetch();
     }
 }
 

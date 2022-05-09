@@ -10,6 +10,8 @@ const BoardHeader = ({ tasks, users }) => {
     const { pathname } = useLocation();
     const { id } = useParams();
 
+    // ЗАГОЛОВОК ДЛЯ СПИСКА ЗАДАЧ
+
     if (pathname === AppRoute.TASK_LIST) {
         return (
             <>
@@ -21,7 +23,11 @@ const BoardHeader = ({ tasks, users }) => {
                 </div>
             </>
         )
-    } else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
+    }
+
+    // ЗАГОЛОВОК ДЛЯ ВЫБРАННОЙ ЗАДАЧИ
+
+    else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
 
         const currentTask = () => {
             if (tasks.length === 0) {
@@ -55,7 +61,11 @@ const BoardHeader = ({ tasks, users }) => {
                 </div>
             </>
         )
-    } else if (pathname === AppRoute.USER_LIST) {
+    }
+
+    // ЗАГОЛОВОК ДЛЯ СПИСКА ПОЛЬЗОВАТЕЛЕЙ
+
+    else if (pathname === AppRoute.USER_LIST) {
         return (
             <>
                 <div className="board__header">
@@ -63,7 +73,11 @@ const BoardHeader = ({ tasks, users }) => {
                 </div>
             </>
         )
-    } else if (pathname === `${AppRoute.USER_LIST}/${id}`) {
+    }
+
+    // ЗАГОЛОВОК ДЛЯ ВЫБРАННОГО ПОЛЬЗОВАТЕЛЯ
+
+    else if (pathname === `${AppRoute.USER_LIST}/${id}`) {
 
         const currentUser = () => {
             if (users.length === 0) {
@@ -91,7 +105,11 @@ const BoardHeader = ({ tasks, users }) => {
                 </div>
             </>
         )
-    } else if (pathname === AppRoute.ADD) {
+    }
+
+    // ЗАГОЛОВОК ДЛЯ ДОБАВЛЕНИЯ ЗАДАЧИ
+    else if (pathname === AppRoute.ADD) {
+
         return (
             <>
                 <div className="board__header">
@@ -102,14 +120,20 @@ const BoardHeader = ({ tasks, users }) => {
                             className="btn-board__header  btn-primary  btn">
                             Сохранить
                         </Link>
-                        <button className="btn-board__header  btn-default  btn">
+                        <button
+                            // onClick={handleSubmit}
+                            className="btn-board__header  btn-default  btn">
                             Отмена
                         </button>
                     </div>
                 </div>
             </>
         )
-    } else if (pathname === `${AppRoute.ADD}/${id}`) {
+    }
+
+    // ЗАГОЛОВОК ДЛЯ РЕДАКТИРОВАНИЯ ЗАДАЧИ
+
+    else if (pathname === `${AppRoute.ADD}/${id}`) {
         return (
             <>
                 <div className="board__header">
