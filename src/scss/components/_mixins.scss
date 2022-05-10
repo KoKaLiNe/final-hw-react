@@ -42,6 +42,12 @@
   }
 }
 
+@mixin btn-disabled {
+  background-color: $innerShadowColor;
+  color: $labelFontColor;
+  border: 1px solid $innerShadowColor;
+}
+
 @mixin btn-primary {
   background-color: $primaryColor;
   color: $disabledFontColor;
@@ -53,6 +59,10 @@
 
   &:active {
     background-color: $primaryColorActive;
+  }
+
+  &:disabled {
+    @include btn-disabled;
   }
 }
 
@@ -68,6 +78,10 @@
   &:active {
     background-color: $successColorActive;
   }
+
+  &:disabled {
+    @include btn-disabled;
+  }
 }
 
 @mixin btn-error {
@@ -82,12 +96,10 @@
   &:active {
     background-color: $errorColorActive;
   }
-}
 
-@mixin btn-disabled {
-  background-color: $innerShadowColor;
-  color: $labelFontColor;
-  border: 1px solid $innerShadowColor;
+  &:disabled {
+    @include btn-disabled;
+  }
 }
 
 @mixin btn-link {

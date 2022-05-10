@@ -1,20 +1,21 @@
 @import './components/reset';
-@import './components/mixins';
 @import './components/colors';
+@import './components/mixins';
+@import './components/card';
 @import './components/buttons';
-@import './components/main';
 @import './components/board';
 @import './components/board-task';
 @import './components/board-user';
 @import './components/dropdown';
+@import './components/main';
+@import './components/modal';
 @import './components/filter';
 @import './components/inputs';
 @import '../components/taskStatus/taskStatus';
-@import '../components/taskPriority/taskPriority';
-@import './components/card';
+@import '../components/taskRank/taskRank';
 
 #root {
-    height: 100%;
+    height: 100vh;
 }
 
 .active-lnk {

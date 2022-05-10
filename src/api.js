@@ -22,6 +22,13 @@ export const getTasks = () => {
 export const addTask = (data) => {
     const taskData = {
         ...data,
+        dateOfUpdate: new Date(),
+        timeInMinutes: 0,
     }
     return request(`${url}/tasks/createOrEdit`, 'PUT', taskData)
+}
+
+export const editStatus = (taskId, status) => {
+    request(`${url}/tasks/${taskId}/status/${status}`, 'PATCH')
+    .then(data => console.log(data))
 }

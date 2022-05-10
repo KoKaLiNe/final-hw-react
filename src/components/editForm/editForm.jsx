@@ -1,35 +1,49 @@
 import React from "react";
-import { AppRoute } from "../../const";
-import { Link, useLocation, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { tasks, users } from "../../store";
+import { loggedUser } from "../../moсks"
 
 
 const EditForm = observer(() => {
-
-    const { pathname } = useLocation();
+    
     const { id } = useParams();
 
-    const defaultUserName = () => {
-        return users.data.length > 0 ? users.data[0].username : ''
+    const editFormHeader = () => {
+        return id ? "Редактирование" : "Создание";
     }
 
-    const loggedUser = '6273dd20d09b551dca8762a5' // мой ID 
+    const currentTask = () => {
+        if (tasks.data.length <= 0) {
+            return '...';
+        } else {
+            return tasks.data.find(x => x.id === id)
+        }
+    }
+
+    const defaultUserId = () => {
+        return users.data.length > 0 ? users.data[0].id : ''
+    }
 
     const [form, setForm] = React.useState({
-        userId: loggedUser, 
-        assignedId: defaultUserName(),
-        title: '',
-        description: '',
-        type: 'task',
-        rank: 'low'
+        userId: (id && currentTask().userId) || loggedUser.id,
+        assignedId: (id && currentTask().assignedId) || defaultUserId(),
+        title: (id && currentTask().title) || '',
+        description: (id && currentTask().description) || '',
+        type: (id && currentTask().type) || 'task',
+        dateOfCreation: (id && currentTask().dateOfCreation) || new Date(),
+        timeInMinutes: (id && currentTask().timeInMinutes) || '0',
+        dateOfUpdate: new Date(),
+        status: (id && currentTask().status) || "opened",
+        rank: (id && currentTask().rank) || 'low',
     })
+
+    // в названии и описании задачи не работает валидация!
 
     const handleFieldChange = (e) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value })
     }
-    console.log(form)
 
     const hist = useHistory();
 
@@ -37,82 +51,62 @@ const EditForm = observer(() => {
         e.preventDefault();
         console.log('submit form', form);
         tasks.addTask({
+            id,
             userId: form.userId,
             assignedId: form.assignedId,
             title: form.title,
             description: form.description,
             type: form.type,
+            dateOfCreation: form.dateOfCreation,
+            dateOfUpdate: form.dateOfUpdate,
+            timeInMinutes: form.timeInMinutes,
+            status: form.status,
             rank: form.rank,
         })
         hist.goBack();
-        // if (id) {
-        //     evt.preventDefault();
-        //     events.editEvent({
-        //         id: id,
-        //         theme: form.theme,
-        //         comment: form.comment,
-        //         date: form.date,
-        //         archive: currentCard.archive,
-        //         favorite: currentCard.favorite,
-        //     })
-        //     hist.goBack();
-        // } else if (!id) {
-        //     evt.preventDefault();
-        //     events.addEvent({
-        //         theme: form.theme,
-        //         comment: form.comment,
-        //         date: form.date,
-        //         favorite: false,
-        //         archive: false,
-        //     })
-        //     hist.goBack();
-        // }
     }
 
-
-    if (pathname === AppRoute.ADD) {
-
-        return (
-
-            <>
-                <div className="board__header">
-                    <h2 className="board__header-title  user-title">Создание</h2>
-                    <div className="board__header-btns">
-                        <button
-                            onClick={handleSubmit}
-                            className="btn-board__header  btn-primary  btn">
-                            Сохранить
-                        </button>
-                        <button
-                            className="btn-board__header  btn-default  btn">
-                            Отмена
-                        </button>
-                    </div>
+    return (
+        <>
+            <div className="board__header">
+                <h2 className="board__header-title  user-title">{editFormHeader()}</h2>
+                <div className="board__header-btns">
+                    <button
+                        className="btn-board__header  btn-primary  btn"
+                        onClick={handleSubmit}
+                    >Сохранить
+                    </button>
+                    <button
+                        className="btn-board__header  btn-default  btn">
+                        Отмена
+                    </button>
                 </div>
+            </div>
 
+            <section className="board__content">
 
                 <div className="card__wrap">
                     <div className="card__col  col-1">
 
-                        <fieldset className="card__field">
+                        <fieldset className="card__field  field">
                             <label
                                 htmlFor="assignedUser"
                                 className="card__label  label"
                             >Исполнитель
                             </label>
                             <select
-                                className="card__select"
+                                className="card__select  select"
                                 onChange={handleFieldChange}
                                 name="assignedId"
-                            >
-                                {users.data.map((user) =>
-                                    <option
-                                        className=""
-                                        name="assignedId"
-                                        value={user.id}
-                                        key={user.id}
-                                    > {user.username} </option>
-                                )}
+                                defaultValue={form.assignedId}
+                            >{users.data.map((user) =>
+                                <option
+                                    // className=""
+                                    name="assignedId"
+                                    value={user.id}
+                                    key={user.id}
+                                > {user.username} </option>
+                            )}
                             </select>
 
                             <label
@@ -121,10 +115,16 @@ const EditForm = observer(() => {
                             >Тип запроса
                             </label>
                             <select
+                                className="card__select  select"
                                 onChange={handleFieldChange}
+                                defaultValue={form.type}
                                 name="type">
-                                <option value="task">Задача</option>
-                                <option value="bug">Ошибка</option>
+                                <option
+                                    value="task"
+                                >Задача</option>
+                                <option
+                                    value="bug"
+                                >Ошибка</option>
                             </select>
 
                             <label
@@ -133,66 +133,60 @@ const EditForm = observer(() => {
                             >Приоритет
                             </label>
                             <select
+                                className="card__select  select"
                                 onChange={handleFieldChange}
-                                name="status">
-                                <option value="">Низкий</option>
-                                <option value="">Средний</option>
-                                <option value="">Выокий</option>
+                                defaultValue={form.rank}
+                                name="rank">
+                                <option
+                                    value="low"
+                                >Низкий</option>
+                                <option
+                                    value="medium"
+                                >Средний</option>
+                                <option
+                                    value="high"
+                                >Высокий</option>
                             </select>
 
                         </fieldset>
-
-                        {/* <p className="card__title"></p>
-                    <p className="card__text">
-                    </p> */}
-
-                        {/* <p className="card__title">Тип запроса</p>
-                    <p className="card__text">Задача (нет автозаполнения)</p>
-
-                    <p className="card__title">Приоритет</p>
-                    <p className="card__text">
-                        
-                        </p> */}
-
                     </div>
 
-
-                    <div className="card__col  col-2">
-                        {/* <p className="card__title">Название</p> */}
-                        <fieldset>
-                            <label htmlFor="">
-                                Название
+                    <div className="card__col  col-2  create">
+                        <fieldset className="card__field  field">
+                            <label
+                                htmlFor="title"
+                                className="card__label  label"
+                            >Название
                             </label>
                             <textarea
                                 typeof="text"
                                 onChange={handleFieldChange}
-                                className="input"
+                                className="input__title  input"
                                 name="title"
                                 placeholder="Введите название задачи"
-                                defaultValue=""
+                                defaultValue={form.title}
                                 required
-                            >
-                            </textarea>
-                        </fieldset>
-                        <p className="card__decription">
-                            {/* {currentCard.header} */}
-                        </p>
-                        {/* <p className="card__title">Описание</p> */}
+                            // required НЕ РАБОТАЕТ
+                            ></textarea>
 
-                        <fieldset>
-                            <label htmlFor="">
-                                Описание
+                            <p className="card__decription">
+                                {/* {currentCard.header} */}
+                            </p>
+
+                            <label
+                                htmlFor=""
+                                className="card__label  label"
+                            >Описание
                             </label>
                             <textarea
                                 typeof="text"
                                 onChange={handleFieldChange}
-                                className="input"
+                                className="input__card-description  input"
                                 name="description"
                                 placeholder="Введите описание задачи"
-                                defaultValue=""
-                                required
-                            >
-                            </textarea>
+                                defaultValue={form.description}
+                            // required НЕ РАБОТАЕТ
+                            ></textarea>
                         </fieldset>
 
                     </div>
@@ -201,86 +195,11 @@ const EditForm = observer(() => {
                     <div className="card__col  col-3">
 
                     </div>
-                </div>
-            </>
-        )
-
-    } else if (pathname === `${AppRoute.ADD}/${id}`) {
-
-
-        // const [form, setForm] = React.useState({
-        //     theme: (id && currentCard.theme) || '',
-        //     comment: (id && currentCard.comment) || '',
-        //     date: (id && moment(currentCard.date).format('YYYY-MM-DDThh:mm')) || moment(new Date()).format('YYYY-MM-DDThh:mm')
-        // });
-
-        // const handleFieldChange = (evt) => {
-        //     const { name, value } = evt.target;
-        //     setForm({ ...form, [name]: value })
-        // }
-
-        // const hist = useHistory();
-
-
-        return (
-            <div className="card__wrap">
-                <div className="card__col  col-1">
-
-                    <select name="" id="">
-                    </select>
-
-                    <fieldset className="card__field">
-                        <label
-                            htmlFor="userName"
-                            className="card__label  label"
-                        >Исполнитель
-                        </label>
-                        <textarea
-                            typeof="text"
-                            className="input"
-                            name="userName"
-                            // defaultValue={currentCard.userName}
-                            required
-                        >
-                        </textarea>
-
-                    </fieldset>
-
-                    <p className="card__title"></p>
-                    <p className="card__text">
-                        {/* {currentCard.user} */}
-                    </p>
-
-                    <p className="card__title">Тип запроса</p>
-                    <p className="card__text">Задача (нет автозаполнения)</p>
-
-                    <p className="card__title">Приоритет</p>
-                    <p className="card__text">
-                        {/* {currentCard.priority} */}
-                    </p>
 
                 </div>
-
-
-                <div className="card__col  col-2">
-                    <p className="card__title">Название</p>
-                    <p className="card__decription">
-                        {/* {currentCard.header} */}
-                    </p>
-                    <p className="card__title">Описание</p>
-                    <p className="card__decription">
-                        Praesent finibus, velit ut luctus dictum, felis nibh sodales dui, nec aliquam ipsum arcu tempor ante. Aliquam gravida lorem quis egestas varius. Quisque cursus est vitae ipsum iaculis, sed convallis massa efficitur. In vestibulum, sapien et consequat luctus, arcu neque pretium justo, nec ullamcorper tortor nulla id nunc. Suspendisse eleifend gravida tortor, sit amet porta lorem posuere sed. Vivamus est neque, varius id sagittis sit amet, blandit eget odio. Fusce egestas elit nec arcu mollis mattis. In porta dapibus lectus in elementum. Nunc non varius ante. Suspendisse sit amet purus ex. Phasellus aliquet ac tortor eu mattis. Suspendisse eget lectus et massa ultricies feugiat.
-                    </p>
-                </div>
-
-
-                <div className="card__col  col-3">
-
-                </div>
-            </div>
-        )
-
-    }
+            </section>
+        </>
+    )
 
 })
 
