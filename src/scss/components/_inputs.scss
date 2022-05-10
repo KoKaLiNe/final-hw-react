@@ -22,4 +22,12 @@
         height: 76px;
         margin-bottom: 10px;
     }
+
+    &__card {
+        &-description {
+            height: 602px;
+            // overflow-y: scroll;
+        }
+
+    }
 }

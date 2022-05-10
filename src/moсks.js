@@ -1,3 +1,13 @@
+export const loggedUser = 
+  {
+    id: "6273dd20d09b551dca8762a5",
+    username: "Даша Холина",
+    login: "KoKa_LiNe",
+    about: null,
+    photoUrl: null,
+  }
+;
+
 export const tasks = [
   {
     id: "6273f146d09b551dca8762ac",

@@ -1,6 +1,6 @@
 import React from "react";
 
-const TaskPriority = ({ rank }) => {
+const TaskRank = ({ rank }) => {
     if (rank === 'low') {
         return (
             <div className="task-prioirity  low">
@@ -34,4 +34,4 @@ const TaskPriority = ({ rank }) => {
     }
 }
 
-export default TaskPriority;
+export default TaskRank;

@@ -9,6 +9,7 @@ const UsersList = observer(({ tasks, users }) => {
     const [startStep, setStartStep] = useState(1)
     const [endStep, setEndStep] = useState(10)
     const [currentPage, setCurrentPage] = useState(1);
+
     const arrayLength = users.length
 
     const props = {

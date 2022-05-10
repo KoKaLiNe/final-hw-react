@@ -34,7 +34,7 @@ const Filter = () => {
             <img src="./img/icons/select-arrow.svg" alt="" />
          </div>
 
-         <div className="board__filter-selector  rank" id="filter-priority">
+         <div className="board__filter-selector  rank" id="filter-rank">
             <span>Приоритет</span>
             <img src="./img/icons/select-arrow.svg" alt="" />
          </div>

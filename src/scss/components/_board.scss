@@ -85,8 +85,9 @@ $boardBGColor: #FFFFFF;
 
     &__item {
         font-family: 'Roboto', sans-serif;
-        display: flex;
+        @include flexible;
         align-items: center;
+        align-content: center;
         flex-direction: row;
         width: 100%;
         height: 100%;
@@ -94,7 +95,7 @@ $boardBGColor: #FFFFFF;
 
         padding: 18px 35px 18px 30px;
 
-        &:last-child .dropdown-content {
+        &:nth-child(10) .dropdown-content {
             top: -78px;
             right: 0px;
         }
