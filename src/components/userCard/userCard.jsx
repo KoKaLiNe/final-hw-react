@@ -30,15 +30,6 @@ const UserCard = ({ tasks, users }) => {
         setCurrentPage
     }
 
-
-
-    //     console.log('id', id)
-    // console.log('currentUserTasks', currentUserTasks)
-    // console.log('tasks.assinedId', tasks.assignedId)
-    // console.log('tasks.userId', tasks.userId)
-    console.log('startStep', startStep)
-    console.log('endStep', endStep)
-
     return (
         <>
             <div className="board__header">
