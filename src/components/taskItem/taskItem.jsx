@@ -32,7 +32,6 @@ const TaskItem = observer(({ tasks, users, id, userId, assignedId, title, descri
     }
 
     const [startStatus, setStartStatus] = React.useState(status)
-    console.log('startStatus', startStatus);
 
     const props = { startStatus, setStartStatus, id }
 

@@ -1,8 +1,9 @@
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { editStatus } from "../../api";
+
 
 const TaskDropdown = observer(({ props }) => {
     const {
@@ -16,12 +17,9 @@ const TaskDropdown = observer(({ props }) => {
 
     const handleChangeStatus = action((e) => {
         e.preventDefault();
-        console.log('e.target.value', e.target.value)
         if (e.target.value === 'inProgress') {
             if (startStatus === 'opened') {
                 setStatus(id, e.target.value);
-                console.log('startStatus', startStatus)
-                console.log(e.target.value)
             }
         } else if (e.target.value === `testing`) {
             if (startStatus === 'inProgress') {

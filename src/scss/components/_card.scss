@@ -48,16 +48,6 @@
     &__form {
         margin-bottom: 20px;
     }
-
-    &__field {
-        @include flexible;
-        flex-direction: column  ;
-    }
-
-    &__select {
-        @include input-default;
-        margin-bottom: 20px;
-    }
 }
 
 .comment {

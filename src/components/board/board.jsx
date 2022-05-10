@@ -107,37 +107,6 @@ const Board = ({ tasks, users }) => {
             </>
         )
     }
-
-    // РЕДАКТИРОВАНИЕ ЗАДАЧИ
-
-    // else if (pathname === `${AppRoute.ADD}/${id}`) {
-    //     return (
-    //         <>
-    //             <section className="board">
-
-    //                 <div className="board__header">
-    //                     <h2 className="board__header-title  user-title">Редактирование</h2>
-
-    //                     <div className="board__header-btns">
-    //                         <Link
-    //                             to={`/task-list/${id}/edit`}
-    //                             className="btn-board__header  btn-primary  btn">
-    //                             Сохранить
-    //                         </Link>
-    //                         <button className="btn-board__header  btn-default  btn">
-    //                             Отмена
-    //                         </button>
-    //                     </div>
-    //                 </div>
-
-    //                 <section className="board__content">
-    //                     <EditForm tasks={tasks} users={users} />
-    //                 </section>
-
-    //             </section>
-    //         </>
-    //     )
-    // }
 }
 
 export default Board;

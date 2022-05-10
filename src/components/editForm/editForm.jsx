@@ -1,14 +1,12 @@
 import React from "react";
-import { AppRoute } from "../../const";
-import { useLocation, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { tasks, users } from "../../store";
 import { loggedUser } from "../../moсks"
 
 
 const EditForm = observer(() => {
-
-    const { pathname } = useLocation();
+    
     const { id } = useParams();
 
     const editFormHeader = () => {
@@ -27,8 +25,6 @@ const EditForm = observer(() => {
         return users.data.length > 0 ? users.data[0].id : ''
     }
 
-    // мой id 6273dd20d09b551dca8762a5
-
     const [form, setForm] = React.useState({
         userId: (id && currentTask().userId) || loggedUser.id,
         assignedId: (id && currentTask().assignedId) || defaultUserId(),
@@ -41,21 +37,6 @@ const EditForm = observer(() => {
         status: (id && currentTask().status) || "opened",
         rank: (id && currentTask().rank) || 'low',
     })
-
-    // console.log(id)
-    // console.log(tasks.data)
-    // console.log(tasks.data.find(x => x.id === id))
-    // console.log("currentTask", currentTask())
-    console.log("form", form)
-    // console.log("userId", currentTask.userId)
-    // console.log("assignedId", currentTask().assignedId)
-    // console.log("title", currentTask().title)
-    // console.log("description", currentTask().description)
-    // console.log("type", currentTask().type)
-    // console.log("status", currentTask().status)
-    // console.log("rank", currentTask().rank)
-    // console.log("dateOfCreation", currentTask().dateOfCreation)
-
 
     // в названии и описании задачи не работает валидация!
 
@@ -107,14 +88,14 @@ const EditForm = observer(() => {
                 <div className="card__wrap">
                     <div className="card__col  col-1">
 
-                        <fieldset className="card__field">
+                        <fieldset className="card__field  field">
                             <label
                                 htmlFor="assignedUser"
                                 className="card__label  label"
                             >Исполнитель
                             </label>
                             <select
-                                className="card__select"
+                                className="card__select  select"
                                 onChange={handleFieldChange}
                                 name="assignedId"
                                 defaultValue={form.assignedId}
@@ -134,7 +115,7 @@ const EditForm = observer(() => {
                             >Тип запроса
                             </label>
                             <select
-                                className="card__select"
+                                className="card__select  select"
                                 onChange={handleFieldChange}
                                 defaultValue={form.type}
                                 name="type">
@@ -152,7 +133,7 @@ const EditForm = observer(() => {
                             >Приоритет
                             </label>
                             <select
-                                className="card__select"
+                                className="card__select  select"
                                 onChange={handleFieldChange}
                                 defaultValue={form.rank}
                                 name="rank">
@@ -171,7 +152,7 @@ const EditForm = observer(() => {
                     </div>
 
                     <div className="card__col  col-2  create">
-                        <fieldset className="card__field">
+                        <fieldset className="card__field  field">
                             <label
                                 htmlFor="title"
                                 className="card__label  label"

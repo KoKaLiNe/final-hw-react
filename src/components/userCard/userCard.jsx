@@ -3,6 +3,9 @@ import Pagination from "../pagination/pagination";
 import TaskItem from "../taskItem/taskItem";
 import { Link, useParams } from "react-router-dom";
 import { AppRoute } from "../../const";
+import Modal from "../modal/modal";
+import { loggedUser } from "../../moсks";
+
 
 const UserCard = ({ tasks, users }) => {
     const { id } = useParams();
@@ -18,7 +21,8 @@ const UserCard = ({ tasks, users }) => {
     const [startStep, setStartStep] = useState(1)
     const [endStep, setEndStep] = useState(10)
     const [currentPage, setCurrentPage] = useState(1);
-    const arrayLength = tasks.length
+    const arrayLength = tasks.filter(x => x.assignedId === id).length
+    const [isModal, setModal] = React.useState(false);
 
     const props = {
         arrayLength,
@@ -29,6 +33,7 @@ const UserCard = ({ tasks, users }) => {
         currentPage,
         setCurrentPage
     }
+    console.log(loggedUser.id)
 
     return (
         <>
@@ -36,15 +41,16 @@ const UserCard = ({ tasks, users }) => {
 
                 <h2 className="board__header-title  user-title">{currentUser().username}</h2>
                 <div className="board__header-btns">
-                    <Link to="#"
+                    <Link to={AppRoute.ADD}
                         className="btn-board__header  btn">
                         Добавить задачу
                     </Link>
-                    <Link
-                        to='#'
-                        className="btn-board__header  btn-primary  btn">
-                        Редактировать
-                    </Link>
+                    <button
+                        onClick={() => setModal(true)}
+                        className="btn-board__header  btn-primary  btn"
+                        disabled={loggedUser.id === undefined || loggedUser.id !== id}
+                    >Редактировать
+                    </button>
                 </div>
             </div>
 
@@ -55,6 +61,7 @@ const UserCard = ({ tasks, users }) => {
                         <div className="card__user-img-wraper  ">
                             <div className="card__user-img" alt="Изображение профиля" />
                         </div>
+                        <h4 className="card__title">О себе</h4>
                         <p className="card__title">{currentUser().about}</p>
                     </div>
                     <div className="card__col  col-2">
@@ -71,6 +78,12 @@ const UserCard = ({ tasks, users }) => {
                 </div>
 
             </section>
+
+            <Modal
+                isVisible={isModal}
+                title="Редактирование пользователя"
+                onClose={() => setModal(false)}
+            />
         </>
     )
 }
