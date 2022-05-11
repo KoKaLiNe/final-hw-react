@@ -11,6 +11,12 @@ import UsersList from "../usersList/usersList";
 
 const Board = ({ tasks, users }) => {
 
+    // const loggedUser = JSON.parse(localStorage.getItem('loggedUserInfo'))
+
+    console.log("localStorage", localStorage);
+    // console.log("loggedUser", loggedUser);
+    // localStorage.clear();
+
     const { pathname } = useLocation();
     const { id } = useParams();
 
@@ -28,13 +34,15 @@ const Board = ({ tasks, users }) => {
 
     else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
 
-        const currentTask = () => {
-            if (tasks.length === 0) {
-                return 0;
-            } else if (tasks.length > 0) {
-                return tasks.find(x => x.id === id);
-            }
-        }
+        // const currentTask = () => {
+        //     if (tasks.length === 0) {
+        //         return 0;
+        //     } else if (tasks.length > 0) {
+        //         return tasks.find(x => x.id === id);
+        //     }
+        // }
+
+        const currentTask = tasks.find(x => x.id === id);
 
         return (
             <>
@@ -42,8 +50,8 @@ const Board = ({ tasks, users }) => {
 
                     <div className="board__header  task-header">
                         <div className="board__header-title  task-title">
-                            <h2 className="board__header-text">{currentTask().title}</h2>
-                            <TaskStatus status={currentTask().status} />
+                            <h2 className="board__header-text">{currentTask.title}</h2>
+                            <TaskStatus status={currentTask.status} />
                         </div>
 
                         <div className="board__header-btns">

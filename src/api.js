@@ -30,5 +30,4 @@ export const addTask = (data) => {
 
 export const editStatus = (taskId, status) => {
     request(`${url}/tasks/${taskId}/status/${status}`, 'PATCH')
-    .then(data => console.log(data))
 }

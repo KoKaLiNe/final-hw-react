@@ -11,30 +11,34 @@ import { tasks, users } from '../../store/index';
 
 
 const App = observer(() => {
-  return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/" exact>
-          {/* условие залогина наверное надо добавить */}
-          <Redirect to={AppRoute.LOGIN} />
-        </Route>
-        <Route path={AppRoute.LOGIN} exact>
-          <Login />
-        </Route>
-        <Route path={AppRoute.TASK} exact>
-          <Main tasks={tasks.data} users={users.data} />
-        </Route>
-        <Route path={AppRoute.EDIT} exact>
-          <Edit tasks={tasks.data} users={users.data}
-          />
-        </Route>
-        <Route path={AppRoute.USER} exact>
-          <Users tasks={tasks.data} users={users.data}
-          />
-        </Route>
-      </Switch>
-    </BrowserRouter>
-  );
+
+  if (tasks.data.length > 0 && users.data.length > 0) {
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route path="/" exact>
+            {/* условие залогина наверное надо добавить */}
+            <Redirect to={AppRoute.LOGIN} />
+          </Route>
+          <Route path={AppRoute.LOGIN} exact>
+            <Login />
+          </Route>
+          <Route path={AppRoute.TASK} exact>
+            <Main tasks={tasks.data} users={users.data} />
+          </Route>
+          <Route path={AppRoute.EDIT} exact>
+            <Edit tasks={tasks.data} users={users.data}
+            />
+          </Route>
+          <Route path={AppRoute.USER} exact>
+            <Users tasks={tasks.data} users={users.data}
+            />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    );
+  }
+
 })
 
 export default App;

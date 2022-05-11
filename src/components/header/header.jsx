@@ -3,12 +3,20 @@ import { AppRoute } from "../../const";
 import { Link } from "react-router-dom";
 import { useLocation, useParams } from "react-router-dom";
 import { loggedUser } from "../../moсks";
+import { action } from "mobx";
+import { observer } from "mobx-react-lite";
 
 
-const Header = () => {
+const Header = observer(() => {
 
     const { pathname } = useLocation();
     const { id } = useParams();
+
+    const loggedOut = () => {
+        localStorage.removeItem("loggedUserInfo");
+        localStorage.removeItem("userPassword");
+        window.location.href = `${AppRoute.LOGIN}`;
+    }
 
     const headerInner = () => {
         if (pathname !== AppRoute.LOGIN) {
@@ -26,7 +34,10 @@ const Header = () => {
                             </div>
                             <div className="main__user-list dropdown-content">
                                 <Link to={`${AppRoute.USER_LIST}/${loggedUser.id}`} className="dropdown-link">Посмотреть профиль</Link>
-                                <Link to="#" className="dropdown-link  accent">Выйти из системы</Link>
+                                <button
+                                    onClick={() => loggedOut()}
+                                    className="dropdown-link  accent"
+                                >Выйти из системы</button>
                             </div>
                         </div>
                     </section>
@@ -42,6 +53,6 @@ const Header = () => {
             {headerInner()}
         </section>
     )
-}
+})
 
 export default Header;

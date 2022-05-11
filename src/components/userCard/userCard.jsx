@@ -4,19 +4,25 @@ import TaskItem from "../taskItem/taskItem";
 import { Link, useParams } from "react-router-dom";
 import { AppRoute } from "../../const";
 import Modal from "../modal/modal";
-import { loggedUser } from "../../moсks";
+// import { loggedUser } from "../../moсks";
 
 
 const UserCard = ({ tasks, users }) => {
+
+    const loggedUser = JSON.parse(localStorage.getItem('loggedUserInfo'))
+    console.log("loggedUser", loggedUser);
+    
     const { id } = useParams();
 
-    const currentUser = () => {
-        if (users.length === 0) {
-            return 0;
-        } else if (users.length > 0) {
-            return users.find(x => x.id === id);
-        }
-    }
+    // const currentUser = () => {
+    //     if (users.length === 0) {
+    //         return 0;
+    //     } else if (users.length > 0) {
+    //         return users.find(x => x.id === id);
+    //     }
+    // }
+
+    const currentUser = users.find(x => x.id === id);
 
     const [startStep, setStartStep] = useState(1)
     const [endStep, setEndStep] = useState(10)
@@ -33,13 +39,12 @@ const UserCard = ({ tasks, users }) => {
         currentPage,
         setCurrentPage
     }
-    console.log(loggedUser.id)
 
     return (
         <>
             <div className="board__header">
 
-                <h2 className="board__header-title  user-title">{currentUser().username}</h2>
+                <h2 className="board__header-title  user-title">{currentUser.username}</h2>
                 <div className="board__header-btns">
                     <Link to={AppRoute.ADD}
                         className="btn-board__header  btn">
@@ -62,7 +67,7 @@ const UserCard = ({ tasks, users }) => {
                             <div className="card__user-img" alt="Изображение профиля" />
                         </div>
                         <h4 className="card__title">О себе</h4>
-                        <p className="card__title">{currentUser().about}</p>
+                        <p className="card__title">{currentUser.about}</p>
                     </div>
                     <div className="card__col  col-2">
                         <p className="card__title">Задачи</p>

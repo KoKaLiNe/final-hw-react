@@ -8,55 +8,80 @@ const TaskCard = ({ tasks, users }) => {
 
     const { id } = useParams();
 
-    const currentTask = () => {
-        if (tasks.length === 0) {
-            return '...';
-        } else if (tasks.length > 0) {
-            return tasks.find(x => x.id === id);
-        }
-    }
+    // const currentTask = () => {
+    //     if (tasks.length === 0) {
+    //         return '...';
+    //     } else if (tasks.length > 0) {
+    //         return tasks.find(x => x.id === id);
+    //     }
+    // }
 
-    const userAssigned = () => {
-        if ((users.length > 0) && (currentTask() !== '...')) {
-            return users.find(x => x.id === currentTask().assignedId).username
-        } else {
-            return '...';
-        }
-    }
+    const currentTask = tasks.find(x => x.id === id)
 
-    const userAuthor = () => {
-        if ((users.length > 0) && (currentTask() !== '...')) {
-            return users.find(x => x.id === currentTask().userId).username
-        } else {
-            return '...';
-        }
-    }
+    // const userAssigned = () => {
+    //     if ((users.length > 0) && (currentTask() !== '...')) {
+    //         return users.find(x => x.id === currentTask().assignedId).username
+    //     } else {
+    //         return '...';
+    //     }
+    // }
+
+    const userAssigned = users.find(x => x.id === currentTask.assignedId).username
+
+    // const userAuthor = () => {
+    //     if ((users.length > 0) && (currentTask() !== '...')) {
+    //         return users.find(x => x.id === currentTask().userId).username
+    //     } else {
+    //         return '...';
+    //     }
+    // }
+
+    const userAuthor = users.find(x => x.id === currentTask.userId).username
+
+    // const taskType = () => {
+    //     if ((tasks.length > 0) && (currentTask() !== '...')) {
+    //         if (currentTask().type === 'task') {
+    //             return 'Задача'
+    //         } else {
+    //             return 'Ошибка'
+    //         }
+    //     } else {
+    //         return '...';
+    //     }
+    // }
 
     const taskType = () => {
-        if ((tasks.length > 0) && (currentTask() !== '...')) {
-            if (currentTask().type === 'task') {
-                return 'Задача'
-            } else {
-                return 'Ошибка'
-            }
+        if (currentTask.type === 'task') {
+            return 'Задача'
         } else {
-            return '...';
+            return 'Ошибка'
         }
     }
 
+    // const taskRank = () => {
+    //     if ((tasks.length > 0) && (currentTask() !== '...')) {
+    //         if (currentTask().rank === 'low') {
+    //             return ("Низкий")
+    //         } else if (currentTask().rank === 'medium') {
+    //             return ("Средний")
+    //         } if (currentTask().rank === 'high') {
+    //             return ("Высокий")
+    //         }
+    //     } else {
+    //         return '...';
+    //     }
+    // }
+
     const taskRank = () => {
-        if ((tasks.length > 0) && (currentTask() !== '...')) {
-            if (currentTask().rank === 'low') {
-                return ("Низкий")
-            } else if (currentTask().rank === 'medium') {
-                return ("Средний")
-            } if (currentTask().rank === 'high') {
-                return ("Высокий")
-            }
-        } else {
-            return '...';
+        if (currentTask.rank === 'low') {
+            return ("Низкий")
+        } else if (currentTask.rank === 'medium') {
+            return ("Средний")
+        } if (currentTask.rank === 'high') {
+            return ("Высокий")
         }
     }
+
 
     const [isModal, setModal] = React.useState(false);
 
@@ -65,10 +90,10 @@ const TaskCard = ({ tasks, users }) => {
             <div className="card__wrap">
                 <div className="card__col  col-1">
                     <p className="card__title">Исполнитель</p>
-                    <p className="card__text">{userAssigned()}</p>
+                    <p className="card__text">{userAssigned}</p>
 
                     <p className="card__title">Автор задачи</p>
-                    <p className="card__text">{userAuthor()}</p>
+                    <p className="card__text">{userAuthor}</p>
 
                     <p className="card__title">Тип запроса</p>
                     <p className="card__text">{taskType()}
@@ -79,13 +104,13 @@ const TaskCard = ({ tasks, users }) => {
                     </p>
 
                     <p className="card__title">Дата создания</p>
-                    <p className="card__text">{moment(currentTask().dateOfCreation).format('DD.MM.YYYY HH:MM')}</p>
+                    <p className="card__text">{moment(currentTask.dateOfCreation).format('DD.MM.YYYY HH:MM')}</p>
 
                     <p className="card__title">Дата изменения</p>
-                    <p className="card__text">{moment(currentTask().dateOfUpdate).format('DD.MM.YYYY HH:MM')}</p>
+                    <p className="card__text">{moment(currentTask.dateOfUpdate).format('DD.MM.YYYY HH:MM')}</p>
 
                     <p className="card__title">Затрачено времени</p>
-                    <p className="card__text">{currentTask().timeInMinutes}</p>
+                    <p className="card__text">{` ${Math.round(currentTask.timeInMinutes / 60 / 24)} дней ${Math.round(currentTask.timeInMinutes / 60)} часов ${currentTask.timeInMinutes} минут`}</p>
 
                     <button
                         className="btn-primary  btn"
@@ -98,7 +123,7 @@ const TaskCard = ({ tasks, users }) => {
                 <div className="card__col  col-2">
                     <p className="card__title">Описание</p>
                     <p className="card__decription">
-                        {currentTask().description}
+                        {currentTask.description}
                     </p>
                 </div>
 
@@ -106,7 +131,7 @@ const TaskCard = ({ tasks, users }) => {
                 <div className="card__col  col-3">
                     <form
                         className="card__form"
-                        form action="#"
+                        // form action="#"
                         method="post">
                         <label
                             htmlFor="comment"

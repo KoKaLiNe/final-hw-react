@@ -6,36 +6,38 @@ import { loggedUser } from "../../moсks"
 
 
 const EditForm = observer(() => {
-    
+
     const { id } = useParams();
 
     const editFormHeader = () => {
         return id ? "Редактирование" : "Создание";
     }
 
-    const currentTask = () => {
-        if (tasks.data.length <= 0) {
-            return '...';
-        } else {
-            return tasks.data.find(x => x.id === id)
-        }
-    }
+    // const currentTask = () => {
+    //     if (tasks.data.length <= 0) {
+    //         return '...';
+    //     } else {
+    //         return tasks.data.find(x => x.id === id)
+    //     }
+    // }
+
+    const currentTask = tasks.data.find(x => x.id === id);
 
     const defaultUserId = () => {
         return users.data.length > 0 ? users.data[0].id : ''
     }
 
     const [form, setForm] = React.useState({
-        userId: (id && currentTask().userId) || loggedUser.id,
-        assignedId: (id && currentTask().assignedId) || defaultUserId(),
-        title: (id && currentTask().title) || '',
-        description: (id && currentTask().description) || '',
-        type: (id && currentTask().type) || 'task',
-        dateOfCreation: (id && currentTask().dateOfCreation) || new Date(),
-        timeInMinutes: (id && currentTask().timeInMinutes) || '0',
+        userId: (id && currentTask.userId) || loggedUser.id,
+        assignedId: (id && currentTask.assignedId) || defaultUserId(),
+        title: (id && currentTask.title) || '',
+        description: (id && currentTask.description) || '',
+        type: (id && currentTask.type) || 'task',
+        dateOfCreation: (id && currentTask.dateOfCreation) || new Date(),
+        timeInMinutes: (id && currentTask.timeInMinutes) || '0',
         dateOfUpdate: new Date(),
-        status: (id && currentTask().status) || "opened",
-        rank: (id && currentTask().rank) || 'low',
+        status: (id && currentTask.status) || "opened",
+        rank: (id && currentTask.rank) || 'low',
     })
 
     // в названии и описании задачи не работает валидация!
@@ -190,8 +192,6 @@ const EditForm = observer(() => {
                         </fieldset>
 
                     </div>
-
-
                     <div className="card__col  col-3">
 
                     </div>

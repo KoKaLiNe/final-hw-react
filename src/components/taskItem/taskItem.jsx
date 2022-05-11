@@ -7,19 +7,21 @@ import { observer } from "mobx-react-lite";
 import TaskDropdown from "../taskDropdown/taskDropdown";
 
 
-const TaskItem = observer(({ tasks, users, id, userId, assignedId, title, description, type, dateOfCreation, dateOfUpdate, timeInMinutes, status, rank, }) => {
+const TaskItem = observer(({ users, id, assignedId, title, type, status, rank }) => {
 
     const { pathname } = useLocation();
 
-    const assignedUserName = () => {
-        if (pathname === AppRoute.TASK_LIST) {
-            if (users.length === 0) {
-                return '...';
-            } else if (users.length > 0) {
-                return users.find(x => x.id === assignedId).username;
-            }
-        }
-    }
+    // const assignedUserName = () => {
+    //     if (pathname === AppRoute.TASK_LIST) {
+    //         if (users.length === 0) {
+    //             return '...';
+    //         } else if (users.length > 0) {
+    //             return users.find(x => x.id === assignedId).username;
+    //         }
+    //     }
+    // }
+
+    const assignedUserName = users.find(x => x.id === assignedId).username;
 
     const taskItemMenu = () => {
         if (pathname === AppRoute.TASK_LIST) {
@@ -65,7 +67,7 @@ const TaskItem = observer(({ tasks, users, id, userId, assignedId, title, descri
             </div>
             <div className="task__user">
                 <p>
-                    {assignedUserName()}
+                    {assignedUserName}
                 </p>
             </div>
             <div className="task__status">
