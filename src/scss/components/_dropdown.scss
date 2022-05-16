@@ -44,7 +44,7 @@
             width: 136px;
             min-height: 40px;
             height: 40px;
-            top: 44px;
+            top: 43px;
             right: 0;
         }
     }
@@ -61,6 +61,7 @@
         padding: 3px 0 3px 4px;
         border: none;
         text-align: left;
+        cursor: pointer;
 
         & a {
             text-decoration: none;
@@ -93,5 +94,6 @@
     &:hover &-btn {
         color: #F4F4F4;
         background-color: $primaryColor;
+        cursor: pointer;
     }
 }

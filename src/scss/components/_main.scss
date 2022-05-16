@@ -3,7 +3,7 @@
     flex-direction: column;
     height: 100%;
 
-    &__wraper {
+    &__wrapper {
         display: flex;
         justify-content: center;
         background-color: #E5E5E5;
@@ -44,29 +44,25 @@
             display: flex;
             align-items: center;
             margin-right: 20px;
-
         }
 
         &-name {
             font-family: 'Roboto', sans-serif;
-            @include font ($size: 16px,$weight: false);
+            @include font ($size: 16px, $weight: false);
             margin-right: 10px;
         }
 
         &-img {
-            background: url(../../../public/img/profile-img.png);
-            background-size: 100%;
-            background-repeat: no-repeat;
-            background-position: 50% 50%;
             width: 40px;
             height: 40px;
             @include border-radius(50%);
             cursor: pointer;
 
-            &-wraper {
-                max-width: 44px;
+            &-wrapper {
+                max-width: 42px;
+                max-height: 42px;
                 background: conic-gradient(#FF6161, #7B61FF, #FF6161, #7B61FF, #FF6161, #7B61FF, #FF6161);
-                padding: 2px;
+                padding: 1px;
                 @include border-radius(50%);
             }
         }
@@ -102,12 +98,7 @@
         &-field {
             display: flex;
             flex-direction: column;
-            margin-bottom: 20px;
             width: 100%;
-
-            &:last-of-type {
-                margin-bottom: 30px;
-            }
         }
     }
 }

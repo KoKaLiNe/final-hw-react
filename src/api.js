@@ -15,8 +15,8 @@ export const getUsers = () => {
     return request(`${url}/users/all`);
 }
 
-export const getTasks = () => {
-    return request(`${url}/tasks`, 'POST', { "filter": {}, "page": 0, "limit": 0 })
+export const getTasks = (filter, page, limit) => {
+    return request(`${url}/tasks`, 'POST', { "filter": filter, "page": page, "limit": limit })
 }
 
 export const addTask = (data) => {

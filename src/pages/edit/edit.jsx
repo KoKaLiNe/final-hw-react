@@ -8,7 +8,7 @@ const Edit = observer(({ tasks, users }) => {
     return (
         <>
             <Header />
-            <section className="main__wraper">
+            <section className="main__wrapper">
                 <Board
                     tasks={tasks}
                     users={users}

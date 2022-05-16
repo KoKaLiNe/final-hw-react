@@ -12,7 +12,9 @@ import { tasks, users } from '../../store/index';
 
 const App = observer(() => {
 
-  if (tasks.data.length > 0 && users.data.length > 0) {
+  // может через сетстейт и юзэффект
+  //  УСЛОВИЕ НЕ ПОДХОДИТ...
+  if (tasks.filteredData.length > 0 && users.data.length > 0) {
     return (
       <BrowserRouter>
         <Switch>
@@ -30,6 +32,10 @@ const App = observer(() => {
             <Edit tasks={tasks.data} users={users.data}
             />
           </Route>
+          <Route path={AppRoute.ADD_TASK_TO_USER} exact>
+            <Edit tasks={tasks.data} users={users.data}
+            />
+          </Route>
           <Route path={AppRoute.USER} exact>
             <Users tasks={tasks.data} users={users.data}
             />
@@ -37,7 +43,7 @@ const App = observer(() => {
         </Switch>
       </BrowserRouter>
     );
-  }
+  } return ("Загружаем")
 
 })
 

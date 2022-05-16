@@ -1,7 +1,8 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 
 
-const Pagination = ({ props }) => {
+const Pagination = observer(({ props }) => {
 
     const {
         arrayLength,
@@ -82,6 +83,6 @@ const Pagination = ({ props }) => {
             </div>
         </>
     )
-}
+})
 
 export default Pagination;

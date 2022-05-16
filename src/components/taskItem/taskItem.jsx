@@ -57,25 +57,27 @@ const TaskItem = observer(({ users, id, assignedId, title, type, status, rank })
 
     return (
         <div className="board__item">
-            <div className="task__type">
-                {taskType()}
-            </div>
-            <div className="task__header">
-                <Link to={`${AppRoute.TASK_LIST}/${id}`}>
+            <Link className="board__task-link" to={`${AppRoute.TASK_LIST}/${id}`}>
+                <div className="board__task-type">
+                    {taskType()}
+                </div>
+                <div className="board__task-header">
+
                     <h3>{title}</h3>
-                </Link>
-            </div>
-            <div className="task__user">
-                <p>
-                    {assignedUserName}
-                </p>
-            </div>
-            <div className="task__status">
-                <TaskStatus status={startStatus} />
-            </div>
-            <div className="task__rank">
-                <TaskRank rank={rank} />
-            </div>
+
+                </div>
+                <div className="board__task-user">
+                    <p>
+                        {assignedUserName}
+                    </p>
+                </div>
+                <div className="board__task-status">
+                    <TaskStatus status={startStatus} />
+                </div>
+                <div className="board__task-rank">
+                    <TaskRank rank={rank} />
+                </div>
+            </Link>
             {taskItemMenu()}
         </div>
     )

@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { AppRoute } from "../../const";
 import { Link } from "react-router-dom";
 import { useLocation, useParams } from "react-router-dom";
-import { loggedUser } from "../../moсks";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 
 
 const Header = observer(() => {
+
+    const [loggedUser, setLoggedUser] = useState({
+        username: "",
+        photoUrl: null
+    })
+
+    if ((loggedUser.username === "") && (localStorage.length > 0)) {
+        setLoggedUser(JSON.parse(localStorage.getItem("loggedUserInfo")))
+    }
+
+    const setDefaulUserPic = () => {
+        return loggedUser.photoUrl === null ? "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg" : loggedUser.photoUrl;
+    }
 
     const { pathname } = useLocation();
     const { id } = useParams();
@@ -19,6 +30,7 @@ const Header = observer(() => {
     }
 
     const headerInner = () => {
+
         if (pathname !== AppRoute.LOGIN) {
             return (
                 <>
@@ -29,8 +41,8 @@ const Header = observer(() => {
                         </div>
                         <div className="main__user-profile  dropdown">
                             <span className="main__user-name">{loggedUser.username}</span>
-                            <div className="main__user-img-wraper  ">
-                                <div className="main__user-img" alt="Изображение профиля" />
+                            <div className="main__user-img-wrapper  ">
+                                <img className="main__user-img" src={setDefaulUserPic()} width="40" height="40" alt="Изображение профиля" />
                             </div>
                             <div className="main__user-list dropdown-content">
                                 <Link to={`${AppRoute.USER_LIST}/${loggedUser.id}`} className="dropdown-link">Посмотреть профиль</Link>
@@ -49,7 +61,7 @@ const Header = observer(() => {
 
     return (
         <section className="main__header">
-            <img src="../img/logo.svg" alt="логотип" />
+            <img src="../../img/logo.svg" alt="логотип" />
             {headerInner()}
         </section>
     )

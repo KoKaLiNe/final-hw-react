@@ -1,4 +1,4 @@
-import { makeAutoObservable, onBecomeObserved } from 'mobx';
+import { makeAutoObservable, observable, onBecomeObserved } from 'mobx';
 import { getTasks, getUsers, addTask } from '../api'
 
 
@@ -38,18 +38,37 @@ class TaskStore {
 
 class TasksStore {
     data = [];
+    filteredData = [];
+    currentUserTasks = [];
+
+    filter = {};
+    page = 0;
+    limit = 0;
 
     constructor() {
         makeAutoObservable(this, {}, {
             autoBind: true,
+
+            data: observable,
+            filteredData: observable
         });
 
         onBecomeObserved(this, 'data', this.fetch);
+        onBecomeObserved(this, 'filteredData', this.fetch);
+        onBecomeObserved(this, 'data', this.filterTask);
     }
 
     *fetch() {
-        const response = yield getTasks();
-        this.data = response.data.map(event => new TaskStore(event));
+        const response = yield getTasks({}, 0, 0);
+        this.data = response.data.map(task => new TaskStore(task));
+        this.filteredData = response.data.map(task => new TaskStore(task));
+        this.currentUserTasks = response.data.map(task => new TaskStore(task));
+    }
+
+    *filterTask() {
+        const response = yield getTasks(this.filter, this.page, this.limit);
+        this.data = response.data.map(task => new TaskStore(task));
+        
     }
 
     *addTask(data) {
@@ -71,7 +90,7 @@ class UserStore {
     about = '';
     photoUrl = ''
 
-    constructor({ id, username, login, about, photoUrl}) {
+    constructor({ id, username, login, about, photoUrl }) {
         makeAutoObservable(this, {}, {
             autoBind: true
         });

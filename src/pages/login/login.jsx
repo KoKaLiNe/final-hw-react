@@ -8,7 +8,7 @@ const Login = observer(() => {
     return (
         <>
             <Header />
-            <section className="main__wraper">
+            <section className="main__wrapper">
                 <LoginForm />
             </section>
         </>

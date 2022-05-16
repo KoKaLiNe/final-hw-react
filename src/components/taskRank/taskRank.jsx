@@ -1,7 +1,8 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 
 
-const TaskRank = ({ rank }) => {
+const TaskRank = observer(({ rank }) => {
     if (rank === 'low') {
         return (
             <div className="task-prioirity  low">
@@ -33,6 +34,6 @@ const TaskRank = ({ rank }) => {
             </div>
         )
     }
-}
+})
 
 export default TaskRank;

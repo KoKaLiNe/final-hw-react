@@ -7,18 +7,15 @@ import UserCard from "../userCard/userCard";
 import EditForm from "../editForm/editForm";
 import TasksList from "../tasksList/tasksList";
 import UsersList from "../usersList/usersList";
+import { observer } from "mobx-react-lite";
 
 
-const Board = ({ tasks, users }) => {
-
-    // const loggedUser = JSON.parse(localStorage.getItem('loggedUserInfo'))
-
-    console.log("localStorage", localStorage);
-    // console.log("loggedUser", loggedUser);
-    // localStorage.clear();
+const Board = observer(({ tasks, users }) => {
 
     const { pathname } = useLocation();
     const { id } = useParams();
+    const { userid } = useParams();
+
 
     // СПИСОК ЗАДАЧ
 
@@ -86,8 +83,7 @@ const Board = ({ tasks, users }) => {
 
         return (
             <>
-                <UsersList tasks={tasks} users={users}
-                />
+                <UsersList tasks={tasks} users={users} />
             </>
         )
     }
@@ -106,15 +102,17 @@ const Board = ({ tasks, users }) => {
 
     // ДОБАВЛЕНИЕ ЗАДАЧ
 
-    else if (pathname === AppRoute.ADD || pathname === `${AppRoute.ADD}/${id}`) {
+    else if (pathname === AppRoute.ADD || pathname === `${AppRoute.ADD}/${id}` || pathname === `${AppRoute.USER_LIST}/${userid}/add`) {
         return (
             <>
                 <section className="board">
-                    <EditForm />
+                    <EditForm
+                        userId={userid}
+                    />
                 </section>
             </>
         )
     }
-}
+})
 
 export default Board;

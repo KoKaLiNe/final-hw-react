@@ -8,6 +8,7 @@ import { loggedUser } from "../../moсks"
 const EditForm = observer(() => {
 
     const { id } = useParams();
+    const { userid } = useParams();
 
     const editFormHeader = () => {
         return id ? "Редактирование" : "Создание";
@@ -22,14 +23,11 @@ const EditForm = observer(() => {
     // }
 
     const currentTask = tasks.data.find(x => x.id === id);
-
-    const defaultUserId = () => {
-        return users.data.length > 0 ? users.data[0].id : ''
-    }
+    const currentUser = users.data.find(x => x.id === userid);
 
     const [form, setForm] = React.useState({
         userId: (id && currentTask.userId) || loggedUser.id,
-        assignedId: (id && currentTask.assignedId) || defaultUserId(),
+        assignedId: (id && currentTask.assignedId) || (userid && currentUser.id) || users.data[0].id,
         title: (id && currentTask.title) || '',
         description: (id && currentTask.description) || '',
         type: (id && currentTask.type) || 'task',
@@ -103,7 +101,6 @@ const EditForm = observer(() => {
                                 defaultValue={form.assignedId}
                             >{users.data.map((user) =>
                                 <option
-                                    // className=""
                                     name="assignedId"
                                     value={user.id}
                                     key={user.id}
@@ -167,13 +164,8 @@ const EditForm = observer(() => {
                                 name="title"
                                 placeholder="Введите название задачи"
                                 defaultValue={form.title}
-                                required
                             // required НЕ РАБОТАЕТ
                             ></textarea>
-
-                            <p className="card__decription">
-                                {/* {currentCard.header} */}
-                            </p>
 
                             <label
                                 htmlFor=""

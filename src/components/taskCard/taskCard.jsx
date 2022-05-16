@@ -2,9 +2,10 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import Modal from "../modal/modal";
+import { observer } from "mobx-react-lite";
 
 
-const TaskCard = ({ tasks, users }) => {
+const TaskCard = observer(({ tasks, users }) => {
 
     const { id } = useParams();
 
@@ -183,6 +184,6 @@ const TaskCard = ({ tasks, users }) => {
 
         </>
     )
-}
+})
 
 export default TaskCard;

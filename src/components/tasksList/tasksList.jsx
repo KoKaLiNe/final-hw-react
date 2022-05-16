@@ -37,7 +37,7 @@ const TasksList = observer(({ tasks, users }) => {
 
                 <section className="board__content">
 
-                    <Filter />
+                    <Filter tasks={tasks} />
                     <div className="board__list">
                         {tasks.slice(startStep - 1, endStep).map(task => <TaskItem {...task} key={task.id}
                             tasks={tasks}
@@ -45,7 +45,7 @@ const TasksList = observer(({ tasks, users }) => {
                         />)}
                     </div>
                     <Pagination props={props} />
-                    
+
                 </section>
 
             </section>

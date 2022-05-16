@@ -25,6 +25,7 @@
     @include input-default;
     resize: none;
     width: 100%;
+    margin-bottom: 20px;
 
     &::placeholder {
         font-family: 'Inter', sans-serif;
@@ -45,7 +46,7 @@
 
     &__card {
         &-description {
-            height: 602px;
+            height: 608px;
         }
     }
 
@@ -53,5 +54,12 @@
         height: 24px;
         padding: 2.5px 10px;
         margin-bottom: 20px;
+    }
+
+    &-filter {
+        height: 24px;
+        padding: 2.5px 10px;
+        margin: 0;
+        max-width: 527px;
     }
 }

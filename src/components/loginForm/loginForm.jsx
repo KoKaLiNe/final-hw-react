@@ -1,12 +1,10 @@
 import { action } from "mobx";
+import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { AppRoute } from "../../const";
 
 
-const LoginForm = () => {
-
-    // localStorage.clear();
-    console.log("localStorage", localStorage);
+const LoginForm = observer(() => {
 
     const loginIn = (login, password) => {
         const request = async () => {
@@ -43,14 +41,8 @@ const LoginForm = () => {
 
     const handleSubmit = action((e) => {
         e.preventDefault();
-
-        console.log("form", form)
-
         loginIn(form.login, form.password);
         localStorage.setItem("userPassword", form.password)
-
-        console.log(localStorage.getItem("userInfo"))
-        console.log(localStorage.getItem("usesPassword"))
     })
 
     return (
@@ -65,13 +57,10 @@ const LoginForm = () => {
                         type="email"
                         className="input"
                         onChange={handleFieldChange}
-                        placeholder="username@e.mail"
-                        defaultValue="KoKa_LiNe"
+                        placeholder="Введите ваш логин"
                         name="login"
                         required
                     />
-                </fieldset>
-                <fieldset className="main__login-field">
                     <label htmlFor="password" className="main__login-label  label">
                         Пароль
                     </label>
@@ -80,7 +69,6 @@ const LoginForm = () => {
                         className="input"
                         onChange={handleFieldChange}
                         placeholder="********"
-                        defaultValue="123"
                         name="password"
                         required
                     />
@@ -92,10 +80,8 @@ const LoginForm = () => {
                 >Вход
                 </button>
             </div>
-
-
         </form>
     )
-}
+})
 
 export default LoginForm;

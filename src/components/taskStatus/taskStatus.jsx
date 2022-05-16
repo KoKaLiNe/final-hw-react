@@ -1,7 +1,8 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 
 
-const TaskStatus = ({ status }) => {
+const TaskStatus = observer(({ status }) => {
     if (status === 'opened') {
         return (
             <div className="task-status  open">
@@ -21,6 +22,6 @@ const TaskStatus = ({ status }) => {
             <span className="task-status  complite">Сделано</span>
         )
     }
-}
+})
 
 export default TaskStatus;

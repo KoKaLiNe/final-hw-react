@@ -4,30 +4,27 @@ import TaskItem from "../taskItem/taskItem";
 import { Link, useParams } from "react-router-dom";
 import { AppRoute } from "../../const";
 import Modal from "../modal/modal";
-// import { loggedUser } from "../../moсks";
+import { observer } from "mobx-react-lite";
+import { tasks } from "../../store";
 
 
-const UserCard = ({ tasks, users }) => {
+const UserCard = observer(({ users }) => {
 
-    const loggedUser = JSON.parse(localStorage.getItem('loggedUserInfo'))
-    console.log("loggedUser", loggedUser);
-    
+    const [loggedUser, setLoggedUser] = useState({
+        username: ""
+    })
+
+    if ((loggedUser.username === "") && (localStorage.length > 0)) {
+        setLoggedUser(JSON.parse(localStorage.getItem("loggedUserInfo")))
+    }
     const { id } = useParams();
-
-    // const currentUser = () => {
-    //     if (users.length === 0) {
-    //         return 0;
-    //     } else if (users.length > 0) {
-    //         return users.find(x => x.id === id);
-    //     }
-    // }
 
     const currentUser = users.find(x => x.id === id);
 
     const [startStep, setStartStep] = useState(1)
     const [endStep, setEndStep] = useState(10)
     const [currentPage, setCurrentPage] = useState(1);
-    const arrayLength = tasks.filter(x => x.assignedId === id).length
+    const arrayLength = tasks.currentUserTasks.filter(x => x.assignedId === id).length
     const [isModal, setModal] = React.useState(false);
 
     const props = {
@@ -39,6 +36,14 @@ const UserCard = ({ tasks, users }) => {
         currentPage,
         setCurrentPage
     }
+    
+    const setDefaulUserPic = () => {
+        if (currentUser.photoUrl === null) {
+            return ("https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg")
+        } else {
+            return (currentUser.photoUrl)
+        }
+    }
 
     return (
         <>
@@ -46,7 +51,7 @@ const UserCard = ({ tasks, users }) => {
 
                 <h2 className="board__header-title  user-title">{currentUser.username}</h2>
                 <div className="board__header-btns">
-                    <Link to={AppRoute.ADD}
+                    <Link to={`${AppRoute.USER_LIST}/${id}/add`}
                         className="btn-board__header  btn">
                         Добавить задачу
                     </Link>
@@ -63,8 +68,8 @@ const UserCard = ({ tasks, users }) => {
 
                 <div className="card__wrap">
                     <div className="card__col  col-1">
-                        <div className="card__user-img-wraper  ">
-                            <div className="card__user-img" alt="Изображение профиля" />
+                        <div className="card__user-img-wrapper  ">
+                            <img className="card__user-img" src={setDefaulUserPic()} width="186" height="186" alt="Изображение профиля" />
                         </div>
                         <h4 className="card__title">О себе</h4>
                         <p className="card__title">{currentUser.about}</p>
@@ -72,7 +77,7 @@ const UserCard = ({ tasks, users }) => {
                     <div className="card__col  col-2">
                         <p className="card__title">Задачи</p>
                         <div className="board__list">
-                            {tasks.filter(x => x.assignedId === id).slice(startStep - 1, endStep).map(task => <TaskItem {...task} key={task.id}
+                            {tasks.currentUserTasks.filter(x => x.assignedId === id).slice(startStep - 1, endStep).map(task => <TaskItem {...task} key={task.id}
                                 tasks={tasks}
                                 users={users}
                             />)}
@@ -91,6 +96,6 @@ const UserCard = ({ tasks, users }) => {
             />
         </>
     )
-}
+})
 
 export default UserCard;

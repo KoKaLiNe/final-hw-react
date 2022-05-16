@@ -2,25 +2,22 @@
     height: 100%;
 
     @include card;
-    
+
     &__col.create {
         border-right: none;
     }
 
     &__user-img {
-        background: url(../../../public/img/profile-img.png);
-        background-size: 100%;
-        background-repeat: no-repeat;
-        background-position: 50% 50%;
-        width: 186px;
-        height: 186px;
+        width: 182px;
+        height: 182px;
         @include border-radius(50%);
         cursor: pointer;
 
-        &-wraper {
-            max-width: 190px;
+        &-wrapper {
+            max-width: 186px;
+            max-height: 186px;
             background: conic-gradient(#FF6161, #7B61FF, #FF6161, #7B61FF, #FF6161, #7B61FF, #FF6161);
-            padding: 2px;
+            padding: 2.3px;
             @include border-radius(50%);
             margin-bottom: 20px;
         }

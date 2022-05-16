@@ -96,7 +96,7 @@ const TaskDropdown = observer(({ props }) => {
     }
 
     return (
-        <div className="task__menu  dropdown">
+        <div className="board__task-menu  dropdown">
             <div className="dropdown-btn">
                 <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 1C0 0.447715 0.447715 0 1 0H9C9.55228 0 10 0.447715 10 1C10 1.55228 9.55228 2 9 2H1C0.447716 2 0 1.55228 0 1Z" fill="currentColor" />
