@@ -38,12 +38,6 @@
         @include font ($size: 20px, $weight: 400);
     }
 
-    &__comment {
-        height: 76px;
-        margin-bottom: 0;
-    }
-
-
     &__footer {
         border-top: 1px solid $innerShadowColor;
 

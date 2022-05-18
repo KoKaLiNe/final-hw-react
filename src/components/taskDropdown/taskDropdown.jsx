@@ -3,6 +3,8 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { Link } from "react-router-dom";
 import { editStatus } from "../../api";
+import { tasks } from "../../store";
+import { deleteTask } from "../../api";
 
 
 const TaskDropdown = observer(({ props }) => {
@@ -95,6 +97,12 @@ const TaskDropdown = observer(({ props }) => {
         }
     }
 
+
+    const handleDelete = action(() => {
+        tasks.deleteTask(id)
+        tasks.fetch()
+    })
+
     return (
         <div className="board__task-menu  dropdown">
             <div className="dropdown-btn">
@@ -108,7 +116,11 @@ const TaskDropdown = observer(({ props }) => {
                 <button className="dropdown-link">
                     <Link to={`/edit/${id}`} >Редактировать</Link>
                 </button>
-                <button className="dropdown-link  accent">Удалить</button>
+                <button
+                    type="button"
+                    className="dropdown-link  accent"
+                    onClick={() => { handleDelete() }}
+                >Удалить</button>
                 {inProgressBtn()}
                 {testingBttn()}
                 {completeBtn()}

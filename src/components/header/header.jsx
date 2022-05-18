@@ -17,7 +17,7 @@ const Header = observer(() => {
     }
 
     const setDefaulUserPic = () => {
-        return loggedUser.photoUrl === null ? "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg" : loggedUser.photoUrl;
+        return (loggedUser.photoUrl === null) || (loggedUser.photoUrl === undefined) ? "../../img/defualt-user-icon.png" : loggedUser.photoUrl;
     }
 
     const { pathname } = useLocation();
@@ -55,7 +55,6 @@ const Header = observer(() => {
                     </section>
                 </>
             )
-
         }
     }
 

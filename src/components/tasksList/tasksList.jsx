@@ -7,6 +7,7 @@ import TaskItem from "../taskItem/taskItem";
 import Pagination from "../pagination/pagination";
 
 
+
 const TasksList = observer(({ tasks, users }) => {
 
     const [startStep, setStartStep] = useState(1)
@@ -51,6 +52,8 @@ const TasksList = observer(({ tasks, users }) => {
             </section>
         </>
     )
+
+
 })
 
 export default TasksList;

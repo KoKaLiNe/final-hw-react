@@ -7,7 +7,7 @@
     @include input-default;
     margin-bottom: 20px;
     padding-right: 10px;
-    appearance: none; 
+    appearance: none;
     overflow: hidden;
     background: url('../../../public/img/icons/select-arrow.svg') no-repeat center;
     background-position: 98%;
@@ -42,6 +42,11 @@
 
     &__modal {
         margin-bottom: 0;
+
+        &-comment {
+            height: 76px;
+            margin-bottom: 0;
+        }
     }
 
     &__card {

@@ -3,6 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { tasks, users } from "../../store";
 import { loggedUser } from "../../moсks"
+import { action } from "mobx";
 
 
 const EditForm = observer(() => {
@@ -40,16 +41,15 @@ const EditForm = observer(() => {
 
     // в названии и описании задачи не работает валидация!
 
-    const handleFieldChange = (e) => {
+    const handleFieldChange = action((e) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value })
-    }
+    })
 
     const hist = useHistory();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = action((e) => {
         e.preventDefault();
-        console.log('submit form', form);
         tasks.addTask({
             id,
             userId: form.userId,
@@ -64,7 +64,7 @@ const EditForm = observer(() => {
             rank: form.rank,
         })
         hist.goBack();
-    }
+    })
 
     return (
         <>

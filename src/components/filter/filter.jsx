@@ -25,7 +25,7 @@ const Filter = observer(() => {
    const [statusCheck, setStatusCheck] = useState([]);
    const [rankCheck, setRankCheck] = useState([]);
 
-   let filter = {
+   const filter = {
       "assignedUsers": userCheck,
       "type": typeCheck,
       "status": statusCheck,
@@ -34,7 +34,7 @@ const Filter = observer(() => {
 
    // Фильтрация по Типу
 
-   const handleChangeType = (position) => {
+   const handleChangeType = action((position) => {
       const updatedCheckedState = checkedTypeState.map((item, index) =>
          index === position ? !item : item
       );
@@ -54,11 +54,11 @@ const Filter = observer(() => {
          }, []
       );
       setTypeCheck(totalTypeFilter);
-   };
+   });
 
    // Фильтрация по Пользователю
 
-   const handleChangeUser = (position) => {
+   const handleChangeUser = action((position) => {
       const updatedCheckedState = checkedUserState.map((item, index) =>
          index === position ? !item : item
       );
@@ -78,14 +78,14 @@ const Filter = observer(() => {
          }, []
       );
       setUserCheck(totalUserFilter);
-   };
+   });
 
-   //  Фильтрация по имени задачи!!!!!!!!!!!
+   //  Фильтрация по имени задачи!!!!!!!!!!!!!!!!
 
 
    // Фильтрация по Приоритету
 
-   const handleChangeStatus = (position) => {
+   const handleChangeStatus = action((position) => {
       const updatedCheckedState = checkedStatusState.map((item, index) =>
          index === position ? !item : item
       );
@@ -105,11 +105,11 @@ const Filter = observer(() => {
          }, []
       );
       setStatusCheck(totalStatusFilter);
-   };
+   });
 
    // Фильтрация по Приоритету
 
-   const handleChangeRank = (position) => {
+   const handleChangeRank = action((position) => {
       const updatedCheckedState = checkedRankState.map((item, index) =>
          index === position ? !item : item
       );
@@ -129,15 +129,15 @@ const Filter = observer(() => {
          }, []
       );
       setRankCheck(totalRankFilter);
-   };
+   });
+
+// const page = 0,
 
 
-
-   //  НЕ УДАЛЯТЬ
    const handelFilter = action(() => {
       tasks.filter = filter;
-      tasks.filterTask();
-
+      console.log(filter)
+      tasks.fetch();
    })
 
 
@@ -307,6 +307,7 @@ const Filter = observer(() => {
             </div>
 
             <button
+               type="button"
                className="btn-primary  btn"
                onClick={() => { handelFilter() }}
             >Применить

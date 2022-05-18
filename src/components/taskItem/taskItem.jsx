@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AppRoute } from "../../const";
 import { observer } from "mobx-react-lite";
 import TaskDropdown from "../taskDropdown/taskDropdown";
+import { tasksMock } from "../../moсks";
 
 
 const TaskItem = observer(({ users, id, assignedId, title, type, status, rank }) => {
@@ -21,7 +22,14 @@ const TaskItem = observer(({ users, id, assignedId, title, type, status, rank })
     //     }
     // }
 
-    const assignedUserName = users.find(x => x.id === assignedId).username;
+    const assignedUserName = () => {
+        if (users.find(x => x.id === assignedId) === undefined) {
+            return (tasksMock.username)
+        } else {
+            return (users.find(x => x.id === assignedId).username)
+        }
+    }
+
 
     const taskItemMenu = () => {
         if (pathname === AppRoute.TASK_LIST) {
@@ -56,7 +64,7 @@ const TaskItem = observer(({ users, id, assignedId, title, type, status, rank })
     }
 
     return (
-        <div className="board__item">
+        <div className="board__item  task-item">
             <Link className="board__task-link" to={`${AppRoute.TASK_LIST}/${id}`}>
                 <div className="board__task-type">
                     {taskType()}
@@ -68,7 +76,7 @@ const TaskItem = observer(({ users, id, assignedId, title, type, status, rank })
                 </div>
                 <div className="board__task-user">
                     <p>
-                        {assignedUserName}
+                        {assignedUserName()}
                     </p>
                 </div>
                 <div className="board__task-status">
@@ -78,7 +86,10 @@ const TaskItem = observer(({ users, id, assignedId, title, type, status, rank })
                     <TaskRank rank={rank} />
                 </div>
             </Link>
+
             {taskItemMenu()}
+
+
         </div>
     )
 })

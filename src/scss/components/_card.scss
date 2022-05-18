@@ -14,8 +14,8 @@
         cursor: pointer;
 
         &-wrapper {
-            max-width: 186px;
-            max-height: 186px;
+            width: 186px;
+            height: 186px;
             background: conic-gradient(#FF6161, #7B61FF, #FF6161, #7B61FF, #FF6161, #7B61FF, #FF6161);
             padding: 2.3px;
             @include border-radius(50%);
@@ -44,6 +44,11 @@
 
     &__form {
         margin-bottom: 20px;
+    }
+
+    &__comments {
+        max-height: 555px;
+        overflow-y: auto;
     }
 }
 

@@ -1,6 +1,57 @@
 import { makeAutoObservable, observable, onBecomeObserved } from 'mobx';
-import { getTasks, getUsers, addTask } from '../api'
+import { getTasks, getUsers, addTask, deleteTask, editUser, getComments } from '../api'
+import { api } from '../api' //AXIOS
 
+
+// НОВЫЕ СТОРЫ
+
+class TasksStore2 {
+    tasks = [];
+
+    // filter = {};
+    // page = 0;
+    // limit = 0;
+
+    constructor() {
+        makeAutoObservable(this, {}, {
+            autoBind: true,
+        });
+    }
+
+    fetchAsyncTasks() {
+        return api.getAsyncTasks()
+            .then((data) => {
+                this.tasks = data.data;
+            })
+    }
+
+
+}
+
+export const tasks2 = new TasksStore2();
+
+
+class UsersStore2 {
+    data = [];
+    loggedUser = null;
+
+    constructor() {
+        makeAutoObservable(this, {}, {
+            autoBind: true,
+        });
+    }
+
+    fetchAsyncUsers() {
+        return api.getAsyncUsers()
+            .then(({ data }) => {
+                this.data = data;
+                // console.log(this.tasks)
+            })
+    }
+
+}
+
+export const users2 = new UsersStore2();
 
 // ЗАДАЧИ
 
@@ -38,7 +89,7 @@ class TaskStore {
 
 class TasksStore {
     data = [];
-    filteredData = [];
+    // filteredData = [];
     currentUserTasks = [];
 
     filter = {};
@@ -49,32 +100,30 @@ class TasksStore {
         makeAutoObservable(this, {}, {
             autoBind: true,
 
-            data: observable,
-            filteredData: observable
+            // data: observable,
+            // filteredData: observable
         });
 
-        onBecomeObserved(this, 'data', this.fetch);
-        onBecomeObserved(this, 'filteredData', this.fetch);
-        onBecomeObserved(this, 'data', this.filterTask);
+        // onBecomeObserved(this, 'data', this.fetch);
+        // onBecomeObserved(this, 'currentUserTasks', this.fetch);
     }
 
     *fetch() {
-        const response = yield getTasks({}, 0, 0);
-        this.data = response.data.map(task => new TaskStore(task));
-        this.filteredData = response.data.map(task => new TaskStore(task));
-        this.currentUserTasks = response.data.map(task => new TaskStore(task));
-    }
-
-    *filterTask() {
         const response = yield getTasks(this.filter, this.page, this.limit);
         this.data = response.data.map(task => new TaskStore(task));
-        
+        this.currentUserTasks = response.data.map(task => new TaskStore(task));
     }
 
     *addTask(data) {
         yield addTask(data)
         yield this.fetch();
     }
+
+    *deleteTask(data) {
+        yield deleteTask(data)
+        yield this.fetch();
+    }
+
 }
 
 export const tasks = new TasksStore();
@@ -111,13 +160,61 @@ class UsersStore {
             autoBind: true,
         });
 
-        onBecomeObserved(this, 'data', this.fetch);
+        // onBecomeObserved(this, 'data', this.fetch);
     }
 
     *fetch() {
         const response = yield getUsers();
         this.data = response.map(event => new UserStore(event));
     }
+
+    *editUser(data) {
+        yield editUser(data)
+        yield this.fetch();
+    }
 }
 
 export const users = new UsersStore();
+
+// class CommentStore {
+//     id;
+//     taskId = '';
+//     userId = '';
+//     text = '';
+//     dateOfCreation = '';
+//     dateOfUpdate = ""
+
+//     constructor({ id, taskId, userId, text, dateOfCreation, dateOfUpdate }) {
+//         makeAutoObservable(this, {}, {
+//             autoBind: true
+//         });
+
+//         this.id = id;
+//         this.taskId = taskId;
+//         this.userId = userId;
+//         this.text = text;
+//         this.dateOfCreation = dateOfCreation;
+//         this.dateOfUpdate = dateOfUpdate;
+//     }
+// }
+
+// class CommentsStore {
+//     data = [];
+//     // taskId = "";
+
+//     constructor() {
+//         makeAutoObservable(this, {}, {
+//             autoBind: true,
+//         });
+
+//         onBecomeObserved(this, 'data', this.fetch);
+//     }
+
+//     *getComments(taskId) {
+//         const response = yield getComments(taskId);
+//         this.data = response.map(comment => new CommentStore(comment));
+//     }
+// }
+// export const comments = new CommentsStore();
+
+

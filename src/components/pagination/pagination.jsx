@@ -1,3 +1,4 @@
+import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import React from "react";
 
@@ -22,28 +23,28 @@ const Pagination = observer(({ props }) => {
         }
     }
 
-    const handleNextPage = () => {
+    const handleNextPage = action(() => {
         if (arrayLength >= endStep) {
             setStartStep(startStep + 10);
             setEndStep(endStep + 10);
             setCurrentPage(currentPage + 1);
         }
-    }
+    })
 
-    const handlePrevPage = () => {
+    const handlePrevPage = action(() => {
         if (endStep >= 0) {
             setStartStep(startStep - 10);
             setEndStep(endStep - 10);
             setCurrentPage(currentPage - 1);
         }
-    }
+    })
 
-    const handleChangePage = (e) => {
+    const handleChangePage = action((e) => {
         e.preventDefault();
         setStartStep(+e.target.value * 10 - 9);
         setEndStep(+e.target.value * 10);
         setCurrentPage(+e.target.value);
-    }
+    })
 
     const pages = () => {
         if (arrayLength === 0) {

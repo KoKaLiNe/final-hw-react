@@ -7,15 +7,18 @@ import UserCard from "../userCard/userCard";
 import EditForm from "../editForm/editForm";
 import TasksList from "../tasksList/tasksList";
 import UsersList from "../usersList/usersList";
+import { tasksMock } from "../../moсks";
 import { observer } from "mobx-react-lite";
-
+import { deleteTask } from "../../api";
+import { useHistory } from "react-router-dom";
+import { action } from "mobx";
 
 const Board = observer(({ tasks, users }) => {
 
     const { pathname } = useLocation();
     const { id } = useParams();
     const { userid } = useParams();
-
+    const hist = useHistory();
 
     // СПИСОК ЗАДАЧ
 
@@ -32,14 +35,24 @@ const Board = observer(({ tasks, users }) => {
     else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
 
         // const currentTask = () => {
-        //     if (tasks.length === 0) {
-        //         return 0;
-        //     } else if (tasks.length > 0) {
+        //     if (tasks.find(x => x.id === id) === undefined) {
+        //         return (tasksMock);
+        //     } else {
         //         return tasks.find(x => x.id === id);
         //     }
         // }
 
-        const currentTask = tasks.find(x => x.id === id);
+        let currentTask;
+        if (tasks.find(x => x.id === id) === undefined) {
+            currentTask = tasksMock
+        } else {
+            currentTask = tasks.find(x => x.id === id)
+        }
+
+        const handleDelete = action((e) => {
+            deleteTask(id)
+            hist.goBack();
+        })
 
         return (
             <>
@@ -60,7 +73,10 @@ const Board = observer(({ tasks, users }) => {
                                 className="btn-board__header  btn-primary  btn">
                                 Редактировать
                             </Link>
-                            <button className="btn-board__header  btn-error  btn">
+                            <button
+                                type="submit"
+                                onClick={() => { handleDelete() }}
+                                className="btn-board__header  btn-error  btn">
                                 Удалить
                             </button>
                         </div>

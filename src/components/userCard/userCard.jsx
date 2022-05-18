@@ -6,26 +6,31 @@ import { AppRoute } from "../../const";
 import Modal from "../modal/modal";
 import { observer } from "mobx-react-lite";
 import { tasks } from "../../store";
+import { tasksMock } from "../../moсks";
 
 
 const UserCard = observer(({ users }) => {
 
-    const [loggedUser, setLoggedUser] = useState({
-        username: ""
-    })
-
-    if ((loggedUser.username === "") && (localStorage.length > 0)) {
+    const [loggedUser, setLoggedUser] = useState("")
+    const [userPassword, seUserPassword] = useState("")
+    if ((loggedUser === "") && (localStorage.length > 0)) {
         setLoggedUser(JSON.parse(localStorage.getItem("loggedUserInfo")))
+        seUserPassword(JSON.parse(localStorage.getItem("userPassword")))
     }
     const { id } = useParams();
 
-    const currentUser = users.find(x => x.id === id);
+    let currentUser;
+    if (users.find(x => x.id === id) === undefined) {
+        currentUser = tasksMock
+    } else {
+        currentUser = users.find(x => x.id === id);
+    }
 
     const [startStep, setStartStep] = useState(1)
     const [endStep, setEndStep] = useState(10)
     const [currentPage, setCurrentPage] = useState(1);
     const arrayLength = tasks.currentUserTasks.filter(x => x.assignedId === id).length
-    const [isModal, setModal] = React.useState(false);
+    const [isModal, setModal] = useState(false);
 
     const props = {
         arrayLength,
@@ -38,8 +43,8 @@ const UserCard = observer(({ users }) => {
     }
     
     const setDefaulUserPic = () => {
-        if (currentUser.photoUrl === null) {
-            return ("https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg")
+        if ((currentUser.photoUrl === null) || currentUser.photoUrl === undefined) {
+            return ("../img/defualt-user-icon.png")
         } else {
             return (currentUser.photoUrl)
         }
@@ -93,6 +98,11 @@ const UserCard = observer(({ users }) => {
                 isVisible={isModal}
                 title="Редактирование пользователя"
                 onClose={() => setModal(false)}
+                loggedUser={loggedUser}
+                userPassword={userPassword}
+                users={users}
+                tasks={tasks.data}
+                
             />
         </>
     )
