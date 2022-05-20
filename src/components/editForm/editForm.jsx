@@ -8,6 +8,7 @@ import { action } from "mobx";
 
 const EditForm = observer(() => {
 
+
     const { id } = useParams();
     const { userid } = useParams();
 
@@ -22,7 +23,7 @@ const EditForm = observer(() => {
     //         return tasks.data.find(x => x.id === id)
     //     }
     // }
-
+   
     const currentTask = tasks.data.find(x => x.id === id);
     const currentUser = users.data.find(x => x.id === userid);
 
@@ -164,6 +165,7 @@ const EditForm = observer(() => {
                                 name="title"
                                 placeholder="Введите название задачи"
                                 defaultValue={form.title}
+                                maxLength="124"
                             // required НЕ РАБОТАЕТ
                             ></textarea>
 

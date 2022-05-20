@@ -196,6 +196,14 @@
       max-width: 320px;
     }
 
+    &.col-2 {
+      overflow-y: auto;
+    }
+
+    &.col-2.user--card {
+      overflow: unset;
+    }
+
     &:last-child {
       height: 650px;
       padding-right: 0;

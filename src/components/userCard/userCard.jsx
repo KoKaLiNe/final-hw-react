@@ -32,6 +32,8 @@ const UserCard = observer(({ users }) => {
     const arrayLength = tasks.currentUserTasks.filter(x => x.assignedId === id).length
     const [isModal, setModal] = useState(false);
 
+    // console.log(tasks.currentUserTasks.filter(x => x.assignedId === id))
+
     const props = {
         arrayLength,
         startStep,
@@ -79,7 +81,7 @@ const UserCard = observer(({ users }) => {
                         <h4 className="card__title">О себе</h4>
                         <p className="card__title">{currentUser.about}</p>
                     </div>
-                    <div className="card__col  col-2">
+                    <div className="card__col  col-2  user--card">
                         <p className="card__title">Задачи</p>
                         <div className="board__list">
                             {tasks.currentUserTasks.filter(x => x.assignedId === id).slice(startStep - 1, endStep).map(task => <TaskItem {...task} key={task.id}

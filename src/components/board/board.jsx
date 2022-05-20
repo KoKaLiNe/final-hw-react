@@ -9,11 +9,12 @@ import TasksList from "../tasksList/tasksList";
 import UsersList from "../usersList/usersList";
 import { tasksMock } from "../../moсks";
 import { observer } from "mobx-react-lite";
-import { deleteTask } from "../../api";
+import { api } from "../../api";
 import { useHistory } from "react-router-dom";
-import { action } from "mobx";
+import { tasks, users } from "../../store";
+import { action, runInAction } from "mobx";
 
-const Board = observer(({ tasks, users }) => {
+const Board = observer(() => {
 
     const { pathname } = useLocation();
     const { id } = useParams();
@@ -25,7 +26,7 @@ const Board = observer(({ tasks, users }) => {
     if (pathname === AppRoute.TASK_LIST) {
         return (
             <>
-                <TasksList tasks={tasks} users={users} />
+                <TasksList tasks={tasks.data} users={users.data} />
             </>
         )
     }
@@ -41,16 +42,16 @@ const Board = observer(({ tasks, users }) => {
         //         return tasks.find(x => x.id === id);
         //     }
         // }
-
+        
         let currentTask;
-        if (tasks.find(x => x.id === id) === undefined) {
+        if (tasks.data.find(x => x.id === id) === undefined) {
             currentTask = tasksMock
         } else {
-            currentTask = tasks.find(x => x.id === id)
+            currentTask = tasks.data.find(x => x.id === id)
         }
 
-        const handleDelete = action((e) => {
-            deleteTask(id)
+        const handleDelete = action(() => {
+            tasks.deleteTask(id);
             hist.goBack();
         })
 
@@ -84,7 +85,7 @@ const Board = observer(({ tasks, users }) => {
 
                     <section className="board__content">
                         <section className="card">
-                            <TaskCard tasks={tasks} users={users} />
+                            <TaskCard tasks={tasks.data} users={users.data} />
                         </section>
                     </section>
 
@@ -99,7 +100,7 @@ const Board = observer(({ tasks, users }) => {
 
         return (
             <>
-                <UsersList tasks={tasks} users={users} />
+                <UsersList tasks={tasks.data} users={users.data} />
             </>
         )
     }
@@ -110,7 +111,7 @@ const Board = observer(({ tasks, users }) => {
         return (
             <>
                 <section className="board">
-                    <UserCard tasks={tasks} users={users} />
+                    <UserCard tasks={tasks.data} users={users.data} />
                 </section>
             </>
         )

@@ -5,8 +5,9 @@ import { AppRoute } from "../../const";
 import { editUser } from "../../api";
 import { action } from "mobx";
 import { tasksMock } from "../../moсks";
+import { users } from "../../store";
 
-const Modal = observer(({ isVisible = false, onClose, users, tasks, loggedUser, userPassword }) => {
+const Modal = observer(({ isVisible = false, onClose, tasks, loggedUser, userPassword }) => {
 
     const { pathname } = useLocation();
     const { id } = useParams();
@@ -15,10 +16,10 @@ const Modal = observer(({ isVisible = false, onClose, users, tasks, loggedUser, 
     let currentTask;
 
     if (pathname === `${AppRoute.USER_LIST}/${id}`) {
-        if (users.find(x => x.id === id) === undefined) {
+        if (users.data.find(x => x.id === id) === undefined) {
             currentUser = tasksMock
         } else {
-            currentUser = users.find(x => x.id === id)
+            currentUser = users.data.find(x => x.id === id)
         }
     } else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
 
@@ -61,13 +62,10 @@ const Modal = observer(({ isVisible = false, onClose, users, tasks, loggedUser, 
 
     const handleFieldChange = action((e) => {
         if (pathname === `${AppRoute.USER_LIST}/${id}`) {
-            console.log("userForm", userForm)
             const { name, value } = e.target;
             setUserForm({ ...userForm, [name]: value })
 
         } else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
-            console.log(timeForm)
-            console.log("userForm", timeForm)
             const { name, value } = e.target;
             setTimeForm({ ...timeForm, [name]: value })
         }
@@ -75,8 +73,7 @@ const Modal = observer(({ isVisible = false, onClose, users, tasks, loggedUser, 
 
     const handleSubmit = action(() => {
         if (pathname === `${AppRoute.USER_LIST}/${id}`) {
-            console.log("userForm", userForm)
-            editUser({
+            users.editUser({
                 "id": loggedUser.id,
                 "login": loggedUser.login,
                 "username": userForm.username,
@@ -84,7 +81,7 @@ const Modal = observer(({ isVisible = false, onClose, users, tasks, loggedUser, 
                 "photoUrl": `${userForm.photoUrl}`,
                 "password": `${userPassword}`
             });
-            onClose()
+            onClose();
         }
 
     })

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import '../../scss/App.scss';
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { AppRoute } from '../../const';
@@ -8,25 +8,17 @@ import Main from '../../pages/main/main';
 import Users from '../../pages/users/users';
 import Edit from '../../pages/edit/edit';
 import { tasks, users } from '../../store/index';
-import { getUsersAxios } from '../../api';
-import { tasks2 } from '../../store/index';
+
 
 const App = observer(() => {
 
-  const [newTasks, setnewTasks] = useState([])
-
-
   useEffect(() => {
-    tasks2.fetchAsyncTasks();
-    setnewTasks(tasks2)
-    tasks.fetch({}, 0, 0);
+    tasks.fetch();
     users.fetch()
   }, []);
 
-  console.log("App test", newTasks)
-
-  if (!tasks.data) {
-    return null
+  if ((tasks.data.length === 0) && (users.data.length === 0)) {
+    return ("ЗАГРУЖАЕМ")
   } else {
     return (
       <BrowserRouter>
@@ -42,7 +34,6 @@ const App = observer(() => {
             <Main
               tasks={tasks.data}
               users={users.data}
-              newTasks={newTasks}
             />
           </Route>
           <Route path={AppRoute.EDIT} exact>
@@ -61,7 +52,6 @@ const App = observer(() => {
       </BrowserRouter>
     );
   }
-
 })
 
 

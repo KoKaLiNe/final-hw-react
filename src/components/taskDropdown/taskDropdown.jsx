@@ -4,7 +4,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { editStatus } from "../../api";
 import { tasks } from "../../store";
-import { deleteTask } from "../../api";
 
 
 const TaskDropdown = observer(({ props }) => {
@@ -14,7 +13,7 @@ const TaskDropdown = observer(({ props }) => {
 
     const setStatus = (id, value) => {
         setStartStatus(value);
-        editStatus(id, value);
+        tasks.editStatus(id, value);
     }
 
     const handleChangeStatus = action((e) => {

@@ -64,7 +64,7 @@ const TaskItem = observer(({ users, id, assignedId, title, type, status, rank })
     }
 
     return (
-        <div className="board__item  task-item">
+        <div className="board__item">
             <Link className="board__task-link" to={`${AppRoute.TASK_LIST}/${id}`}>
                 <div className="board__task-type">
                     {taskType()}
