@@ -3,8 +3,18 @@
 
     @include card;
 
-    &__col.create {
-        border-right: none;
+    &__col {
+        &.create {
+            border-right: none;
+        }
+    }
+
+    &.error {
+        color: $errorColor;
+        height: 50px;
+        margin-top: 24px;
+        margin-bottom: 38px;
+        margin-left: -31px;
     }
 
     &__user-img {

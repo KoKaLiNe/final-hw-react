@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { tasks, users } from "../../store";
@@ -30,26 +30,46 @@ const EditForm = observer(({ currentTask, currentUser }) => {
     const handleFieldChange = action((e) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value })
+        console.log(form.title.length)
+
     })
+
+    const [titleValid, setTitleValid] = useState("")
+    const [descriptionValid, setDescriptionValid] = useState("")
+
+    useEffect(() => {
+        if (form.title.length === 0) {
+            setTitleValid("*")
+        } else if (form.title.length > 0) {
+            setTitleValid("")
+        }
+        if (form.description.length === 0) {
+            setDescriptionValid("*")
+        } else if (form.description.length > 0) {
+            setDescriptionValid("")
+        }
+    }, [form.title, form.description])
 
     const hist = useHistory();
 
     const handleSubmit = action((e) => {
         e.preventDefault();
-        tasks.addTask({
-            id,
-            userId: form.userId,
-            assignedId: form.assignedId,
-            title: form.title,
-            description: form.description,
-            type: form.type,
-            dateOfCreation: form.dateOfCreation,
-            dateOfUpdate: form.dateOfUpdate,
-            timeInMinutes: form.timeInMinutes,
-            status: form.status,
-            rank: form.rank,
-        })
-        hist.goBack();
+        if (titleValid === "" && descriptionValid === "") {
+            tasks.addTask({
+                id,
+                userId: form.userId,
+                assignedId: form.assignedId,
+                title: form.title,
+                description: form.description,
+                type: form.type,
+                dateOfCreation: form.dateOfCreation,
+                dateOfUpdate: form.dateOfUpdate,
+                timeInMinutes: form.timeInMinutes,
+                status: form.status,
+                rank: form.rank,
+            })
+            hist.goBack();
+        }
     })
 
     return (
@@ -60,11 +80,13 @@ const EditForm = observer(({ currentTask, currentUser }) => {
                     <button
                         className="btn-board__header  btn-primary  btn"
                         form="add-task-form"
+                        onClick={handleSubmit}
                     >Сохранить
                     </button>
                     <button
-                        className="btn-board__header  btn-default  btn">
-                        Отмена
+                        className="btn-board__header  btn-default  btn"
+                        onClick={() => { hist.goBack() }}
+                    >Отмена
                     </button>
                 </div>
             </div>
@@ -74,9 +96,10 @@ const EditForm = observer(({ currentTask, currentUser }) => {
                 <div className="card__wrap">
                     <div className="card__col  col-1">
 
-                        <form 
-                        className="card__field  field"
-                        onSubmit={handleSubmit}>
+                        <form
+                            method="post"
+                            className="card__field  field"
+                        >
                             <label
                                 htmlFor="assignedUser"
                                 className="card__label  label"
@@ -158,6 +181,7 @@ const EditForm = observer(({ currentTask, currentUser }) => {
                                 spellCheck
                                 required
                             ></textarea>
+
                             <label
                                 htmlFor=""
                                 className="card__label  label"
@@ -177,7 +201,8 @@ const EditForm = observer(({ currentTask, currentUser }) => {
 
                     </div>
                     <div className="card__col  col-3">
-
+                        <p className="card error"> {titleValid} </p>
+                        <p className="card error"> {descriptionValid} </p>
                     </div>
 
                 </div>
