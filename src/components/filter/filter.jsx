@@ -1,40 +1,42 @@
-import { action } from "mobx";
-import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
+import { action, runInAction } from "mobx";
+import { observer } from "mobx-react-lite";
 import { tasks, users } from "../../store";
-import { type, status, rank } from "../../const";
 
 
 const Filter = observer(() => {
 
    const [checkedTypeState, setCheckedTypeState] = useState(
-      new Array(type.length).fill(false)
+      new Array(tasks.type.length).fill(false)
    );
    const [checkedUserState, setCheckedUserState] = useState(
       new Array(users.data.length).fill(false)
    );
+
    const [checkedStatusState, setCheckedStatusState] = useState(
-      new Array(status.length).fill(false)
+      new Array(tasks.status.length).fill(false)
    );
    const [checkedRankState, setCheckedRankState] = useState(
-      new Array(rank.length).fill(false)
+      new Array(tasks.rank.length).fill(false)
    );
 
    const [typeCheck, setTypeCheck] = useState([]);
    const [userCheck, setUserCheck] = useState([]);
+   const [query, setQuery] = useState("")
    const [statusCheck, setStatusCheck] = useState([]);
    const [rankCheck, setRankCheck] = useState([]);
 
    const filter = {
+      "query": query.value,
       "assignedUsers": userCheck,
       "type": typeCheck,
       "status": statusCheck,
       "rank": rankCheck
    }
 
-   // Фильтрация по Типу
 
-   const handleChangeType = action((position) => {
+   // Фильтрация по Типу
+   const handleChangeType = (position) => {
       const updatedCheckedState = checkedTypeState.map((item, index) =>
          index === position ? !item : item
       );
@@ -44,21 +46,20 @@ const Filter = observer(() => {
       const totalTypeFilter = updatedCheckedState.reduce(
          (sum, currentState, index) => {
             if (currentState === true) {
-               sum.push(type[index].value)
+               sum.push(tasks.type[index].value)
                return sum;
-            } else if (currentState === false && typeCheck.includes(type[index].value) && sum.includes(type[index].value)) {
-               sum.splice(type[index].value)
+            } else if (currentState === false && typeCheck.includes(tasks.type[index].value) && sum.includes(tasks.type[index].value)) {
+               sum.splice(tasks.type[index].value)
                return sum;
             }
             return sum;
          }, []
       );
       setTypeCheck(totalTypeFilter);
-   });
+   };
 
    // Фильтрация по Пользователю
-
-   const handleChangeUser = action((position) => {
+   const handleChangeUser = (position) => {
       const updatedCheckedState = checkedUserState.map((item, index) =>
          index === position ? !item : item
       );
@@ -78,14 +79,16 @@ const Filter = observer(() => {
          }, []
       );
       setUserCheck(totalUserFilter);
-   });
+   };
 
-   //  Фильтрация по имени задачи!!!!!!!!!!!!!!!!
-
+   //  Фильтрация по имени задачи
+   const handleChangeTheme = action((e) => {
+      const { value } = e.target;
+      setQuery({ ...query, value })
+   })
 
    // Фильтрация по Приоритету
-
-   const handleChangeStatus = action((position) => {
+   const handleChangeStatus = (position) => {
       const updatedCheckedState = checkedStatusState.map((item, index) =>
          index === position ? !item : item
       );
@@ -95,21 +98,20 @@ const Filter = observer(() => {
       const totalStatusFilter = updatedCheckedState.reduce(
          (sum, currentState, index) => {
             if (currentState === true) {
-               sum.push(status[index].value)
+               sum.push(tasks.status[index].value)
                return sum;
-            } else if (currentState === false && statusCheck.includes(status[index].value) && sum.includes(status[index].value)) {
-               sum.splice(status[index].value)
+            } else if (currentState === false && statusCheck.includes(tasks.status[index].value) && sum.includes(tasks.status[index].value)) {
+               sum.splice(tasks.status[index].value)
                return sum;
             }
             return sum;
          }, []
       );
       setStatusCheck(totalStatusFilter);
-   });
+   };
 
    // Фильтрация по Приоритету
-
-   const handleChangeRank = action((position) => {
+   const handleChangeRank = (position) => {
       const updatedCheckedState = checkedRankState.map((item, index) =>
          index === position ? !item : item
       );
@@ -119,27 +121,25 @@ const Filter = observer(() => {
       const totalRankFilter = updatedCheckedState.reduce(
          (sum, currentState, index) => {
             if (currentState === true) {
-               sum.push(rank[index].value)
+               sum.push(tasks.rank[index].value)
                return sum;
-            } else if (currentState === false && rankCheck.includes(rank[index].value) && sum.includes(rank[index].value)) {
-               sum.splice(rank[index].value)
+            } else if (currentState === false && rankCheck.includes(tasks.rank[index].value) && sum.includes(tasks.rank[index].value)) {
+               sum.splice(tasks.rank[index].value)
                return sum;
             }
             return sum;
          }, []
       );
       setRankCheck(totalRankFilter);
-   });
+   };
 
-// const page = 0,
+   const handelFilter = () => {
+      runInAction(() => {
+         tasks.filter = filter;
+         tasks.fetch();
 
-
-   const handelFilter = action(() => {
-      tasks.filter = filter;
-      console.log(filter)
-      tasks.fetch();
-   })
-
+      })
+   }
 
    return (
       <>
@@ -154,11 +154,10 @@ const Filter = observer(() => {
                         <path d="M3.07861 6L0 0H1.82084L3.48812 3.52304C3.59537 3.74706 3.69287 3.98916 3.78062 4.24932C3.86837 4.50948 3.92931 4.72809 3.96344 4.90515H4.02194C4.05606 4.72087 4.12188 4.50045 4.21938 4.2439C4.31688 3.98374 4.41682 3.74345 4.5192 3.52304L6.18647 0H8L4.92139 6H3.07861Z" fill="#B5B5B5" />
                      </svg>
                   </div>
-                  <div className="checkbox__list">
-                     {type.map(({ name }, index) => {
+                  <ul className="checkbox__list">
+                     {tasks.type.map(({ name }, index) => {
                         return (
-
-                           <div className="checkbox__item" key={index}>
+                           <li className="checkbox__item" key={index}>
                               <input
                                  className="filter__checkbox"
                                  type="checkbox"
@@ -172,33 +171,29 @@ const Filter = observer(() => {
                                  className="filter__label"
                                  htmlFor={`filter-type-${index}`}
                               >{name}</label>
-                           </div>
+                           </li>
                         );
                      })}
-                  </div>
+                  </ul>
                </div>
             </div>
 
-            {/* ФИЛЬТР ПО НАЗВАНИЮ ЗАДАЧИ
-            !!!!!!!!!!!!!!!!!!!!!!!!!! не забыть про шити инпут */}
+            {/* ФИЛЬТР ПО НАЗВАНИЮ ЗАДАЧИ  */}
             <div className="filter__item  task-name">
                <div className="filter__wrapper  task-name">
                   <fieldset className="filter__fieldset">
                      <textarea
                         type="text"
-                        //   onChange={handleFieldChange}
+                        onChange={handleChangeTheme}
                         className="input  input-filter"
                         name="filter-theme"
                         id="filter-theme"
                         placeholder="Название задачи"
-                        //   defaultValue={form.theme}
+                        defaultValue={query.value}
                         required
                      ></textarea>
-                     {/* <label className="filter__label" htmlFor="filter-theme" ></label> */}
                   </fieldset>
                </div>
-
-
             </div>
 
             {/* ФИЛЬТР ПО ПОЛЬЗОВАТЕЛЮ */}
@@ -211,7 +206,6 @@ const Filter = observer(() => {
                      </svg>
                   </div>
                   <div className="checkbox__list">
-
                      <div className="checkbox__wrapper">
                         {users.data.map(({ id, username }, index) => {
                            return (
@@ -232,8 +226,8 @@ const Filter = observer(() => {
                      </div>
                   </div>
                </div>
-
             </div>
+
             {/* ФИЛЬТР ПО СТАТУСУ */}
             <div className="filter__item  status">
                <div className="filter__wrapper  status">
@@ -244,8 +238,7 @@ const Filter = observer(() => {
                      </svg>
                   </div>
                   <div className="checkbox__list">
-
-                     {status.map(({ name }, index) => {
+                     {tasks.status.map(({ name }, index) => {
                         return (
                            <div className="checkbox__item" key={index}>
                               <div className="">
@@ -282,7 +275,7 @@ const Filter = observer(() => {
                      </svg>
                   </div>
                   <div className="checkbox__list">
-                     {rank.map(({ name }, index) => {
+                     {tasks.rank.map(({ name }, index) => {
                         return (
                            <div className="checkbox__item" key={index}>
                               <input
@@ -303,7 +296,6 @@ const Filter = observer(() => {
                      })}
                   </div>
                </div>
-
             </div>
 
             <button

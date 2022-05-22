@@ -7,7 +7,6 @@ import TaskItem from "../taskItem/taskItem";
 import Pagination from "../pagination/pagination";
 
 
-
 const TasksList = observer(({ tasks, users }) => {
 
     const [startStep, setStartStep] = useState(1)
@@ -28,32 +27,25 @@ const TasksList = observer(({ tasks, users }) => {
     return (
         <>
             <section className="board">
-
                 <div className="board__header">
                     <h2 className="board__header-title">Задачи</h2>
                     <button className="btn-primary  btn">
                         <Link to={AppRoute.ADD} className="btn-link">Добавить задачу</Link>
                     </button>
                 </div>
-
                 <section className="board__content">
-
                     <Filter tasks={tasks} />
                     <div className="board__list">
                         {tasks.slice(startStep - 1, endStep).map(task => <TaskItem {...task} key={task.id}
                             tasks={tasks}
-                            users={users}
+                            tasksUser={users}
                         />)}
                     </div>
                     <Pagination props={props} />
-
                 </section>
-
             </section>
         </>
     )
-
-
 })
 
 export default TasksList;

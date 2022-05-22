@@ -3,18 +3,16 @@ import { useParams } from "react-router-dom";
 import moment from "moment";
 import Modal from "../modal/modal";
 import { observer } from "mobx-react-lite";
-import { addComments, getComments, deleteComment } from "../../api";
-import { tasksMock } from "../../moсks";
+import { tasks, users } from "../../store";
 import { action } from "mobx";
+import { api } from "../../api";
 
-const TaskCard = observer(({ tasks, users }) => {
 
+const TaskCard = observer(() => {
 
-    const [loggedUser, setLoggedUser] = useState({
-        id: "",
-    })
+    const [loggedUser, setLoggedUser] = useState([])
 
-    if ((loggedUser.id === "") && (localStorage.length > 0)) {
+    if ((loggedUser.length === 0) && (localStorage.length > 0)) {
         setLoggedUser(JSON.parse(localStorage.getItem("loggedUserInfo")))
     }
 
@@ -22,25 +20,24 @@ const TaskCard = observer(({ tasks, users }) => {
 
     let currentTask;
 
-    if (tasks.find(x => x.id === id) === undefined) {
-        currentTask = tasksMock
-    }
-    else {
-        currentTask = tasks.find(x => x.id === id)
+    if (tasks.data.find(x => x.id === id) === undefined) {
+        currentTask = tasks.mock
+    } else {
+        currentTask = tasks.data.find(x => x.id === id)
     }
 
     let userAssigned;
-    if (users.find(x => x.id === currentTask.assignedId) === undefined) {
-        userAssigned = tasksMock.username
+    if (users.data.find(x => x.id === currentTask.assignedId) === undefined) {
+        userAssigned = users.mock.username
     } else {
-        userAssigned = users.find(x => x.id === currentTask.assignedId).username
+        userAssigned = users.data.find(x => x.id === currentTask.assignedId).username
     }
 
     let userAuthor
-    if (users.find(x => x.id === currentTask.userId) === undefined) {
-        userAuthor = tasksMock.username
+    if (users.data.find(x => x.id === currentTask.userId) === undefined) {
+        userAuthor = users.mock.username
     } else {
-        userAuthor = users.find(x => x.id === currentTask.userId).username
+        userAuthor = users.data.find(x => x.id === currentTask.userId).username
     }
 
     const taskType = () => {
@@ -77,15 +74,39 @@ const TaskCard = observer(({ tasks, users }) => {
         }
     }
 
-    const timeInMinutes = () => {
+    const taskTime = () => {
         if (currentTask === "null" || currentTask === undefined) {
             return (0)
         } else {
-            return (currentTask.timeInMinutes)
+            let min = currentTask.timeInMinutes;
+            let hour = min / 60;
+            let decCache = [],
+                decCases = [2, 0, 1, 1, 1, 2];
+
+            function decOfNum(number, titles) {
+                if (!decCache[number])
+                    decCache[number] =
+                        number % 100 > 4 && number % 100 < 20
+                            ? 2
+                            : decCases[Math.min(number % 10, 5)];
+                return titles[decCache[number]];
+            }
+
+            let fullTime =
+                Math.floor(hour / 24) +
+                " " +
+                decOfNum(Math.floor(hour / 24), ["день", "дня", "дней"]) +
+                " " +
+                Math.floor(hour % 24) +
+                " " +
+                decOfNum(Math.floor(hour % 24), ["час", "часа", "часов"]) +
+                " " +
+                Math.floor(min % 60) +
+                " " +
+                decOfNum(Math.floor(min % 60), ["минута", "минуты", "минут"]);
+            return (fullTime)
         }
     }
-
-    // console.log(moment("20111031", "YYYYMMDD").format())
 
     const description = () => {
         if (currentTask === "null" || currentTask === undefined) {
@@ -95,25 +116,23 @@ const TaskCard = observer(({ tasks, users }) => {
         }
     }
 
-    const [isModal, setModal] = React.useState(false);
+    const [isModal, setModal] = useState(false);
 
-    const [commentForm, setCommentForm] = React.useState({
+    const [commentForm, setCommentForm] = useState({
         taskId: id,
         userId: JSON.parse(localStorage.getItem("loggedUserInfo")).id,
-        text: '',
+        text: null,
         dateOfCreation: new Date(),
         dateOfUpdate: new Date()
     });
     const handleFieldChange = action((evt) => {
         const { name, value } = evt.target;
         setCommentForm({ ...commentForm, [name]: value })
-        console.log(commentForm)
     })
 
     async function handleSubmit(e) {
         e.preventDefault();
-        console.log("submit", commentForm)
-        await addComments(
+        await api.addComments(
             {
                 "taskId": commentForm.taskId,
                 "userId": commentForm.userId,
@@ -122,21 +141,18 @@ const TaskCard = observer(({ tasks, users }) => {
                 "dateOfUpdate": commentForm.dateOfUpdate,
             }
         );
-        await getComments(id).then((data) => setComments(data));
-
+        await api.getComments(id).then((data) => setComments(data));
     }
-
 
     const [comments, setComments] = useState([])
 
     useEffect(() => {
-        getComments(id).then((data) => setComments(data))
-    }, []);
+        api.getComments(id).then((data) => setComments(data))
+    }, [id]);
 
     async function handelDeletComment(e) {
-        await deleteComment(e.target.value);
-        await getComments(id).then((data) => setComments(data));
-        console.log("comments", comments)
+        await api.deleteComment(e.target.value);
+        await api.getComments(id).then((data) => setComments(data));
     }
 
     return (
@@ -165,8 +181,7 @@ const TaskCard = observer(({ tasks, users }) => {
 
                     <p className="card__title">Затрачено времени</p>
                     <p className="card__text">
-                        {timeInMinutes()}
-                        {/* {` ${Math.round(timeInMinutes() / 60 / 24)} дней ${Math.round(timeInMinutes() / 60)} часов ${timeInMinutes()} минут`} */}
+                        {taskTime()}
                     </p>
 
                     <button
@@ -176,7 +191,6 @@ const TaskCard = observer(({ tasks, users }) => {
                     </button>
                 </div>
 
-
                 <div className="card__col  col-2">
                     <p className="card__title">Описание</p>
                     <p className="card__decription">
@@ -184,12 +198,11 @@ const TaskCard = observer(({ tasks, users }) => {
                     </p>
                 </div>
 
-
                 <div className="card__col  col-3">
                     <form
                         className="card__form"
-                        // form action="#"
-                        method="post">
+                        method="post"
+                        onSubmit={handleSubmit}>
                         <label
                             htmlFor="comment"
                             className="card__title  label"
@@ -203,21 +216,25 @@ const TaskCard = observer(({ tasks, users }) => {
                             name="text"
                             placeholder="Текст комментария"
                             required
-                        ></textarea>
+                        >{commentForm.text}</textarea>
                         <button
-                            onClick={handleSubmit}
                             className="btn-success  btn"
                             type="submit"
                         >Добавить комментарий</button>
                     </form>
 
                     <div className="card__comments">
-
                         {comments.map((comment) => {
                             return (
                                 <div className="card__comment  comment" key={comment.id}>
                                     <div className="comment__title">
-                                        <p className="comment__user-name">{(((users.find(x => x.id === comment.userId) !== undefined) && users.find(x => x.id === comment.userId).username)) || ("не указан")} ({moment(comment.dateOfUpdate).format('DD.MM.YYYY HH:MM')})</p>
+                                        <p className="comment__user-name">
+                                            {
+                                                (((users.data.find(x => x.id === comment.userId) !== undefined)
+                                                    && users.data.find(x => x.id === comment.userId).username))
+                                                || ("не указан")
+                                            }
+                                            ({moment(comment.dateOfUpdate).format('DD.MM.YYYY HH:MM')})</p>
 
                                         {loggedUser.id === comment.userId &&
                                             <button
@@ -226,13 +243,12 @@ const TaskCard = observer(({ tasks, users }) => {
                                                 className="btn__comment  btn-link  btn  currentUser"
                                                 value={comment.id}
                                             >Удалить</button>}
-
                                     </div>
                                     <p className="comment__text">{comment.text}</p>
                                 </div>
                             )
-                        })}
-
+                        })
+                        }
                     </div>
                 </div>
             </div>
@@ -240,9 +256,8 @@ const TaskCard = observer(({ tasks, users }) => {
                 isVisible={isModal}
                 onClose={() => setModal(false)}
                 tasks={tasks}
-                users={users}
+                setComments={setComments}
             />
-
         </>
     )
 })

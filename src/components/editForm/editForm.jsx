@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { tasks, users } from "../../store";
-import { loggedUser } from "../../moсks"
 import { action } from "mobx";
 
 
-const EditForm = observer(() => {
+const EditForm = observer(({ currentTask, currentUser }) => {
 
     const { id } = useParams();
     const { userid } = useParams();
@@ -15,20 +14,9 @@ const EditForm = observer(() => {
         return id ? "Редактирование" : "Создание";
     }
 
-    // const currentTask = () => {
-    //     if (tasks.data.length <= 0) {
-    //         return '...';
-    //     } else {
-    //         return tasks.data.find(x => x.id === id)
-    //     }
-    // }
-
-    const currentTask = tasks.data.find(x => x.id === id);
-    const currentUser = users.data.find(x => x.id === userid);
-
-    const [form, setForm] = React.useState({
-        userId: (id && currentTask.userId) || loggedUser.id,
-        assignedId: (id && currentTask.assignedId) || (userid && currentUser.id) || users.data[0].id,
+    const [form, setForm] = useState({
+        userId: (id && currentTask.userId) || users.loggedUser.id,
+        assignedId: (id && currentTask.assignedId) || userid || users.data[0].id,
         title: (id && currentTask.title) || '',
         description: (id && currentTask.description) || '',
         type: (id && currentTask.type) || 'task',
@@ -38,8 +26,6 @@ const EditForm = observer(() => {
         status: (id && currentTask.status) || "opened",
         rank: (id && currentTask.rank) || 'low',
     })
-
-    // в названии и описании задачи не работает валидация!
 
     const handleFieldChange = action((e) => {
         const { name, value } = e.target;
@@ -73,7 +59,7 @@ const EditForm = observer(() => {
                 <div className="board__header-btns">
                     <button
                         className="btn-board__header  btn-primary  btn"
-                        onClick={handleSubmit}
+                        form="add-task-form"
                     >Сохранить
                     </button>
                     <button
@@ -88,7 +74,9 @@ const EditForm = observer(() => {
                 <div className="card__wrap">
                     <div className="card__col  col-1">
 
-                        <fieldset className="card__field  field">
+                        <form 
+                        className="card__field  field"
+                        onSubmit={handleSubmit}>
                             <label
                                 htmlFor="assignedUser"
                                 className="card__label  label"
@@ -146,12 +134,14 @@ const EditForm = observer(() => {
                                     value="high"
                                 >Высокий</option>
                             </select>
-
-                        </fieldset>
+                        </form>
                     </div>
 
                     <div className="card__col  col-2  create">
-                        <fieldset className="card__field  field">
+                        <form
+                            className="card__field  field"
+                            id="add-task-form"
+                        >
                             <label
                                 htmlFor="title"
                                 className="card__label  label"
@@ -164,9 +154,10 @@ const EditForm = observer(() => {
                                 name="title"
                                 placeholder="Введите название задачи"
                                 defaultValue={form.title}
-                            // required НЕ РАБОТАЕТ
+                                maxLength="124"
+                                spellCheck
+                                required
                             ></textarea>
-
                             <label
                                 htmlFor=""
                                 className="card__label  label"
@@ -179,9 +170,10 @@ const EditForm = observer(() => {
                                 name="description"
                                 placeholder="Введите описание задачи"
                                 defaultValue={form.description}
-                            // required НЕ РАБОТАЕТ
+                                spellCheck
+                                required
                             ></textarea>
-                        </fieldset>
+                        </form>
 
                     </div>
                     <div className="card__col  col-3">

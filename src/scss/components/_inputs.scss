@@ -51,7 +51,8 @@
 
     &__card {
         &-description {
-            height: 608px;
+            height: 607px;
+            margin-bottom: 0;
         }
     }
 
@@ -62,9 +63,9 @@
     }
 
     &-filter {
-        height: 24px;
+        height: 27px;
         padding: 2.5px 10px;
-        margin: 0;
+        margin: -1px;
         max-width: 527px;
     }
 }

@@ -76,7 +76,7 @@ const Pagination = observer(({ props }) => {
                     )}
                     <button
                         className="btn-pagination  btn-next  btn"
-                        disabled={!(arrayLength >= endStep)}
+                        disabled={!(arrayLength > endStep)}
                         onClick={handleNextPage}> Вперед
                     </button>
                 </div>
