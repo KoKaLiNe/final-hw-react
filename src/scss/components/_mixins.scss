@@ -138,44 +138,7 @@
     border: 1px solid $primaryColor;
     outline: none;
     box-shadow: 0 0 2px rgba(123, 97, 255, 0.5);
-
-    // &:invalid {
-    //   border: 1px solid $errorColor;
-    //   outline: none;
-    //   box-shadow: 0 0 2px rgba(255, 97, 97, 0.5);
-    // }
-
-    // &:valid {
-    //   border: 1px solid $successColor;
-    //   outline: none;
-    //   box-shadow: 0 0 2px rgba(97, 255, 151, 0.5);
-    // }
   }
-
-  // &:valid {
-  //   &:hover {
-  //     border: 1px solid $successColor;
-  //   }
-
-  //   &:focus {
-  //     border: 1px solid $successColor;
-  //     outline: none;
-  //     box-shadow: 0 0 2px rgba(97, 255, 151, 0.5);
-  //   }
-  // }
-
-  // &:invalid {
-  //   &:hover {
-  //     border: 1px solid $errorColor;
-  //   }
-
-  //   &:focus {
-  //     border: 1px solid $errorColor;
-  //     outline: none;
-  //     box-shadow: 0 0 2px rgba(255, 97, 97, 0.5);
-  //   }
-  // }
-
 }
 
 @mixin card {

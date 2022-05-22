@@ -3,19 +3,16 @@ import { useParams } from "react-router-dom";
 import moment from "moment";
 import Modal from "../modal/modal";
 import { observer } from "mobx-react-lite";
-import { tasksMock } from "../../moсks";
+import { tasks, users } from "../../store";
 import { action } from "mobx";
 import { api } from "../../api";
 
 
-const TaskCard = observer(({ tasks, users }) => {
+const TaskCard = observer(() => {
 
+    const [loggedUser, setLoggedUser] = useState([])
 
-    const [loggedUser, setLoggedUser] = useState({
-        id: "",
-    })
-
-    if ((loggedUser.id === "") && (localStorage.length > 0)) {
+    if ((loggedUser.length === 0) && (localStorage.length > 0)) {
         setLoggedUser(JSON.parse(localStorage.getItem("loggedUserInfo")))
     }
 
@@ -23,25 +20,24 @@ const TaskCard = observer(({ tasks, users }) => {
 
     let currentTask;
 
-    if (tasks.find(x => x.id === id) === undefined) {
-        currentTask = tasksMock
-    }
-    else {
-        currentTask = tasks.find(x => x.id === id)
+    if (tasks.data.find(x => x.id === id) === undefined) {
+        currentTask = tasks.mock
+    } else {
+        currentTask = tasks.data.find(x => x.id === id)
     }
 
     let userAssigned;
-    if (users.find(x => x.id === currentTask.assignedId) === undefined) {
-        userAssigned = tasksMock.username
+    if (users.data.find(x => x.id === currentTask.assignedId) === undefined) {
+        userAssigned = users.mock.username
     } else {
-        userAssigned = users.find(x => x.id === currentTask.assignedId).username
+        userAssigned = users.data.find(x => x.id === currentTask.assignedId).username
     }
 
     let userAuthor
-    if (users.find(x => x.id === currentTask.userId) === undefined) {
-        userAuthor = tasksMock.username
+    if (users.data.find(x => x.id === currentTask.userId) === undefined) {
+        userAuthor = users.mock.username
     } else {
-        userAuthor = users.find(x => x.id === currentTask.userId).username
+        userAuthor = users.data.find(x => x.id === currentTask.userId).username
     }
 
     const taskType = () => {
@@ -77,7 +73,7 @@ const TaskCard = observer(({ tasks, users }) => {
             return (moment(currentTask.dateOfUpdate).format('DD.MM.YYYY HH:MM'))
         }
     }
-    // console.log(currentTask.timeInMinutes)
+
     const taskTime = () => {
         if (currentTask === "null" || currentTask === undefined) {
             return (0)
@@ -96,7 +92,7 @@ const TaskCard = observer(({ tasks, users }) => {
                 return titles[decCache[number]];
             }
 
-            let fullTime = 
+            let fullTime =
                 Math.floor(hour / 24) +
                 " " +
                 decOfNum(Math.floor(hour / 24), ["день", "дня", "дней"]) +
@@ -112,173 +108,133 @@ const TaskCard = observer(({ tasks, users }) => {
         }
     }
 
-const description = () => {
-    if (currentTask === "null" || currentTask === undefined) {
-        return ("...")
-    } else {
-        return (currentTask.description)
-    }
-}
-
-const [isModal, setModal] = React.useState(false);
-
-const [commentForm, setCommentForm] = React.useState({
-    taskId: id,
-    userId: JSON.parse(localStorage.getItem("loggedUserInfo")).id,
-    text: '',
-    dateOfCreation: new Date(),
-    dateOfUpdate: new Date()
-});
-const handleFieldChange = action((evt) => {
-    const { name, value } = evt.target;
-    setCommentForm({ ...commentForm, [name]: value })
-})
-
-async function handleSubmit(e) {
-    e.preventDefault();
-    await api.addComments(
-        {
-            "taskId": commentForm.taskId,
-            "userId": commentForm.userId,
-            "text": commentForm.text,
-            "dateOfCreation": commentForm.dateOfCreation,
-            "dateOfUpdate": commentForm.dateOfUpdate,
+    const description = () => {
+        if (currentTask === "null" || currentTask === undefined) {
+            return ("...")
+        } else {
+            return (currentTask.description)
         }
-    );
-    await api.getComments(id).then((data) => setComments(data));
-}
-
-const [comments, setComments] = useState([])
-
-useEffect(() => {
-    api.getComments(id).then((data) => setComments(data))
-}, []);
-
-async function handelDeletComment(e) {
-    await api.deleteComment(e.target.value);
-    await api.getComments(id).then((data) => setComments(data));
-}
-
-const showComment = () => {
-    if (comments !== []) {
-        return (
-            <>
-                {comments.map((comment) => {
-                    return (
-                        <div className="card__comment  comment" key={comment.id}>
-                            <div className="comment__title">
-                                <p className="comment__user-name">{(((users.find(x => x.id === comment.userId) !== undefined) && users.find(x => x.id === comment.userId).username)) || ("не указан")} ({moment(comment.dateOfUpdate).format('DD.MM.YYYY HH:MM')})</p>
-
-                                {loggedUser.id === comment.userId &&
-                                    <button
-                                        onClick={handelDeletComment}
-                                        type="button"
-                                        className="btn__comment  btn-link  btn  currentUser"
-                                        value={comment.id}
-                                    >Удалить</button>}
-
-                            </div>
-                            <p className="comment__text">{comment.text}</p>
-                        </div>
-                    )
-                })
-                }
-            </>
-
-        )
-    } else {
-        return (
-            <>
-                <div className="card__comment  comment">
-                    <div className="comment__title">
-                        <p className="comment__user-name"></p>
-
-                    </div>
-                    <p className="comment__text">Здесь пока нет комментариев</p>
-                </div>
-            </>
-        )
     }
-}
 
-return (
-    <>
-        <div className="card__wrap">
-            <div className="card__col  col-1">
-                <p className="card__title">Исполнитель</p>
-                <p className="card__text">{userAssigned}</p>
+    const [isModal, setModal] = useState(false);
 
-                <p className="card__title">Автор задачи</p>
-                <p className="card__text">{userAuthor}</p>
+    const [commentForm, setCommentForm] = useState({
+        taskId: id,
+        userId: JSON.parse(localStorage.getItem("loggedUserInfo")).id,
+        text: null,
+        dateOfCreation: new Date(),
+        dateOfUpdate: new Date()
+    });
+    const handleFieldChange = action((evt) => {
+        const { name, value } = evt.target;
+        setCommentForm({ ...commentForm, [name]: value })
+    })
 
-                <p className="card__title">Тип запроса</p>
-                <p className="card__text">{taskType()}
-                </p>
+    async function handleSubmit(e) {
+        e.preventDefault();
+        await api.addComments(
+            {
+                "taskId": commentForm.taskId,
+                "userId": commentForm.userId,
+                "text": commentForm.text,
+                "dateOfCreation": commentForm.dateOfCreation,
+                "dateOfUpdate": commentForm.dateOfUpdate,
+            }
+        );
+        await api.getComments(id).then((data) => setComments(data));
+    }
 
-                <p className="card__title">Приоритет</p>
-                <p className="card__text">{taskRank()}
-                </p>
+    const [comments, setComments] = useState([])
 
-                <p className="card__title">Дата создания</p>
-                <p className="card__text">{dateOfCreation()}</p>
+    useEffect(() => {
+        api.getComments(id).then((data) => setComments(data))
+    }, [id]);
 
-                <p className="card__title">Дата изменения</p>
-                <p className="card__text">{dateOfUpdate()}</p>
+    async function handelDeletComment(e) {
+        await api.deleteComment(e.target.value);
+        await api.getComments(id).then((data) => setComments(data));
+    }
 
-                <p className="card__title">Затрачено времени</p>
-                <p className="card__text">
-                    {taskTime()}
-                </p>
+    return (
+        <>
+            <div className="card__wrap">
+                <div className="card__col  col-1">
+                    <p className="card__title">Исполнитель</p>
+                    <p className="card__text">{userAssigned}</p>
 
-                <button
-                    className="btn-primary  btn"
-                    onClick={() => setModal(true)}
-                >Сделать запись о работе
-                </button>
-            </div>
+                    <p className="card__title">Автор задачи</p>
+                    <p className="card__text">{userAuthor}</p>
 
+                    <p className="card__title">Тип запроса</p>
+                    <p className="card__text">{taskType()}
+                    </p>
 
-            <div className="card__col  col-2">
-                <p className="card__title">Описание</p>
-                <p className="card__decription">
-                    {description()}
-                </p>
-            </div>
+                    <p className="card__title">Приоритет</p>
+                    <p className="card__text">{taskRank()}
+                    </p>
 
+                    <p className="card__title">Дата создания</p>
+                    <p className="card__text">{dateOfCreation()}</p>
 
-            <div className="card__col  col-3">
-                <form
-                    className="card__form"
-                    // form action="#"
-                    method="post">
-                    <label
-                        htmlFor="comment"
-                        className="card__title  label"
-                    >Комментарии ({comments.length})
-                    </label>
-                    <textarea
-                        onChange={handleFieldChange}
-                        className="input__comment  input"
-                        id="text"
-                        type="text"
-                        name="text"
-                        placeholder="Текст комментария"
-                        required
-                    ></textarea>
+                    <p className="card__title">Дата изменения</p>
+                    <p className="card__text">{dateOfUpdate()}</p>
+
+                    <p className="card__title">Затрачено времени</p>
+                    <p className="card__text">
+                        {taskTime()}
+                    </p>
+
                     <button
-                        onClick={handleSubmit}
-                        className="btn-success  btn"
-                        type="submit"
-                    >Добавить комментарий</button>
-                </form>
+                        className="btn-primary  btn"
+                        onClick={() => setModal(true)}
+                    >Сделать запись о работе
+                    </button>
+                </div>
 
-                <div className="card__comments">
-                    {showComment()}
-                    {/* {comments.map((comment) => {
+                <div className="card__col  col-2">
+                    <p className="card__title">Описание</p>
+                    <p className="card__decription">
+                        {description()}
+                    </p>
+                </div>
+
+                <div className="card__col  col-3">
+                    <form
+                        className="card__form"
+                        method="post"
+                        onSubmit={handleSubmit}>
+                        <label
+                            htmlFor="comment"
+                            className="card__title  label"
+                        >Комментарии ({comments.length})
+                        </label>
+                        <textarea
+                            onChange={handleFieldChange}
+                            className="input__comment  input"
+                            id="text"
+                            type="text"
+                            name="text"
+                            placeholder="Текст комментария"
+                            required
+                        >{commentForm.text}</textarea>
+                        <button
+                            className="btn-success  btn"
+                            type="submit"
+                        >Добавить комментарий</button>
+                    </form>
+
+                    <div className="card__comments">
+                        {comments.map((comment) => {
                             return (
                                 <div className="card__comment  comment" key={comment.id}>
                                     <div className="comment__title">
-                                        <p className="comment__user-name">{(((users.find(x => x.id === comment.userId) !== undefined) && users.find(x => x.id === comment.userId).username)) || ("не указан")} ({moment(comment.dateOfUpdate).format('DD.MM.YYYY HH:MM')})</p>
+                                        <p className="comment__user-name">
+                                            {
+                                                (((users.data.find(x => x.id === comment.userId) !== undefined)
+                                                    && users.data.find(x => x.id === comment.userId).username))
+                                                || ("не указан")
+                                            }
+                                            ({moment(comment.dateOfUpdate).format('DD.MM.YYYY HH:MM')})</p>
 
                                         {loggedUser.id === comment.userId &&
                                             <button
@@ -287,25 +243,23 @@ return (
                                                 className="btn__comment  btn-link  btn  currentUser"
                                                 value={comment.id}
                                             >Удалить</button>}
-
                                     </div>
                                     <p className="comment__text">{comment.text}</p>
                                 </div>
                             )
-                        })} */}
-
+                        })
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
-        <Modal
-            isVisible={isModal}
-            onClose={() => setModal(false)}
-            tasks={tasks}
-            users={users}
-        />
-
-    </>
-)
+            <Modal
+                isVisible={isModal}
+                onClose={() => setModal(false)}
+                tasks={tasks}
+                setComments={setComments}
+            />
+        </>
+    )
 })
 
 export default TaskCard;

@@ -2,7 +2,6 @@ import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { Link } from "react-router-dom";
-import { editStatus } from "../../api";
 import { tasks } from "../../store";
 
 
@@ -62,7 +61,6 @@ const TaskDropdown = observer(({ props }) => {
                     >На тестирование</button>
                 </>
             )
-
         }
     }
 
@@ -77,7 +75,6 @@ const TaskDropdown = observer(({ props }) => {
                     >Сделано</button>
                 </>
             )
-
         }
     }
 
@@ -92,7 +89,6 @@ const TaskDropdown = observer(({ props }) => {
                     >Переоткрыть</button>
                 </>
             )
-
         }
     }
 

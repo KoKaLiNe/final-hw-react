@@ -1,35 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import TaskStatus from "../taskStatus/taskStatus";
 import TaskRank from "../taskRank/taskRank";
 import { Link, useLocation } from "react-router-dom";
 import { AppRoute } from "../../const";
 import { observer } from "mobx-react-lite";
 import TaskDropdown from "../taskDropdown/taskDropdown";
-import { tasksMock } from "../../moсks";
+import { tasks } from "../../store";
 
 
-const TaskItem = observer(({ users, id, assignedId, title, type, status, rank }) => {
+const TaskItem = observer(({ tasksUser, id, assignedId, title, type, status, rank }) => {
 
     const { pathname } = useLocation();
 
-    // const assignedUserName = () => {
-    //     if (pathname === AppRoute.TASK_LIST) {
-    //         if (users.length === 0) {
-    //             return '...';
-    //         } else if (users.length > 0) {
-    //             return users.find(x => x.id === assignedId).username;
-    //         }
-    //     }
-    // }
-
     const assignedUserName = () => {
-        if (users.find(x => x.id === assignedId) === undefined) {
-            return (tasksMock.username)
-        } else {
-            return (users.find(x => x.id === assignedId).username)
+        if (pathname === AppRoute.TASK_LIST && tasksUser.find(x => x.id === assignedId) === undefined) {
+            return (tasks.mock.username)
+        } else if (pathname === AppRoute.TASK_LIST) {
+            return (tasksUser.find(x => x.id === assignedId).username)
         }
     }
-
 
     const taskItemMenu = () => {
         if (pathname === AppRoute.TASK_LIST) {
@@ -41,7 +30,7 @@ const TaskItem = observer(({ users, id, assignedId, title, type, status, rank })
         }
     }
 
-    const [startStatus, setStartStatus] = React.useState(status)
+    const [startStatus, setStartStatus] = useState(status)
 
     const props = { startStatus, setStartStatus, id }
 
@@ -70,9 +59,7 @@ const TaskItem = observer(({ users, id, assignedId, title, type, status, rank })
                     {taskType()}
                 </div>
                 <div className="board__task-header">
-
                     <h3>{title}</h3>
-
                 </div>
                 <div className="board__task-user">
                     <p>
@@ -86,10 +73,7 @@ const TaskItem = observer(({ users, id, assignedId, title, type, status, rank })
                     <TaskRank rank={rank} />
                 </div>
             </Link>
-
             {taskItemMenu()}
-
-
         </div>
     )
 })

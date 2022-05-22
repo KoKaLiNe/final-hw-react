@@ -45,12 +45,6 @@ $boardBGColor: #FFFFFF;
             text-overflow: ellipsis;
             max-width: 410px;
             cursor: default;
-
-            &:hover {
-                white-space: normal;
-                max-width: 700px;
-
-            }
         }
 
         &-btns {

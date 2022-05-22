@@ -1,24 +1,23 @@
+import React, { useState } from "react";
 import { action, runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
 import { tasks, users } from "../../store";
-import { type, status, rank } from "../../const";
 
 
 const Filter = observer(() => {
 
    const [checkedTypeState, setCheckedTypeState] = useState(
-      new Array(type.length).fill(false)
+      new Array(tasks.type.length).fill(false)
    );
    const [checkedUserState, setCheckedUserState] = useState(
       new Array(users.data.length).fill(false)
    );
 
    const [checkedStatusState, setCheckedStatusState] = useState(
-      new Array(status.length).fill(false)
+      new Array(tasks.status.length).fill(false)
    );
    const [checkedRankState, setCheckedRankState] = useState(
-      new Array(rank.length).fill(false)
+      new Array(tasks.rank.length).fill(false)
    );
 
    const [typeCheck, setTypeCheck] = useState([]);
@@ -37,7 +36,6 @@ const Filter = observer(() => {
 
 
    // Фильтрация по Типу
-
    const handleChangeType = (position) => {
       const updatedCheckedState = checkedTypeState.map((item, index) =>
          index === position ? !item : item
@@ -48,10 +46,10 @@ const Filter = observer(() => {
       const totalTypeFilter = updatedCheckedState.reduce(
          (sum, currentState, index) => {
             if (currentState === true) {
-               sum.push(type[index].value)
+               sum.push(tasks.type[index].value)
                return sum;
-            } else if (currentState === false && typeCheck.includes(type[index].value) && sum.includes(type[index].value)) {
-               sum.splice(type[index].value)
+            } else if (currentState === false && typeCheck.includes(tasks.type[index].value) && sum.includes(tasks.type[index].value)) {
+               sum.splice(tasks.type[index].value)
                return sum;
             }
             return sum;
@@ -61,7 +59,6 @@ const Filter = observer(() => {
    };
 
    // Фильтрация по Пользователю
-
    const handleChangeUser = (position) => {
       const updatedCheckedState = checkedUserState.map((item, index) =>
          index === position ? !item : item
@@ -84,15 +81,13 @@ const Filter = observer(() => {
       setUserCheck(totalUserFilter);
    };
 
-   //  Фильтрация по имени задачи!!!!!!!!!!!!!!!!
+   //  Фильтрация по имени задачи
    const handleChangeTheme = action((e) => {
       const { value } = e.target;
       setQuery({ ...query, value })
    })
 
-
    // Фильтрация по Приоритету
-
    const handleChangeStatus = (position) => {
       const updatedCheckedState = checkedStatusState.map((item, index) =>
          index === position ? !item : item
@@ -103,10 +98,10 @@ const Filter = observer(() => {
       const totalStatusFilter = updatedCheckedState.reduce(
          (sum, currentState, index) => {
             if (currentState === true) {
-               sum.push(status[index].value)
+               sum.push(tasks.status[index].value)
                return sum;
-            } else if (currentState === false && statusCheck.includes(status[index].value) && sum.includes(status[index].value)) {
-               sum.splice(status[index].value)
+            } else if (currentState === false && statusCheck.includes(tasks.status[index].value) && sum.includes(tasks.status[index].value)) {
+               sum.splice(tasks.status[index].value)
                return sum;
             }
             return sum;
@@ -116,7 +111,6 @@ const Filter = observer(() => {
    };
 
    // Фильтрация по Приоритету
-
    const handleChangeRank = (position) => {
       const updatedCheckedState = checkedRankState.map((item, index) =>
          index === position ? !item : item
@@ -127,10 +121,10 @@ const Filter = observer(() => {
       const totalRankFilter = updatedCheckedState.reduce(
          (sum, currentState, index) => {
             if (currentState === true) {
-               sum.push(rank[index].value)
+               sum.push(tasks.rank[index].value)
                return sum;
-            } else if (currentState === false && rankCheck.includes(rank[index].value) && sum.includes(rank[index].value)) {
-               sum.splice(rank[index].value)
+            } else if (currentState === false && rankCheck.includes(tasks.rank[index].value) && sum.includes(tasks.rank[index].value)) {
+               sum.splice(tasks.rank[index].value)
                return sum;
             }
             return sum;
@@ -138,8 +132,6 @@ const Filter = observer(() => {
       );
       setRankCheck(totalRankFilter);
    };
-
-   // const page = 0,
 
    const handelFilter = () => {
       runInAction(() => {
@@ -163,9 +155,8 @@ const Filter = observer(() => {
                      </svg>
                   </div>
                   <ul className="checkbox__list">
-                     {type.map(({ name }, index) => {
+                     {tasks.type.map(({ name }, index) => {
                         return (
-
                            <li className="checkbox__item" key={index}>
                               <input
                                  className="filter__checkbox"
@@ -203,8 +194,6 @@ const Filter = observer(() => {
                      ></textarea>
                   </fieldset>
                </div>
-
-
             </div>
 
             {/* ФИЛЬТР ПО ПОЛЬЗОВАТЕЛЮ */}
@@ -217,7 +206,6 @@ const Filter = observer(() => {
                      </svg>
                   </div>
                   <div className="checkbox__list">
-
                      <div className="checkbox__wrapper">
                         {users.data.map(({ id, username }, index) => {
                            return (
@@ -238,8 +226,8 @@ const Filter = observer(() => {
                      </div>
                   </div>
                </div>
-
             </div>
+
             {/* ФИЛЬТР ПО СТАТУСУ */}
             <div className="filter__item  status">
                <div className="filter__wrapper  status">
@@ -250,8 +238,7 @@ const Filter = observer(() => {
                      </svg>
                   </div>
                   <div className="checkbox__list">
-
-                     {status.map(({ name }, index) => {
+                     {tasks.status.map(({ name }, index) => {
                         return (
                            <div className="checkbox__item" key={index}>
                               <div className="">
@@ -288,7 +275,7 @@ const Filter = observer(() => {
                      </svg>
                   </div>
                   <div className="checkbox__list">
-                     {rank.map(({ name }, index) => {
+                     {tasks.rank.map(({ name }, index) => {
                         return (
                            <div className="checkbox__item" key={index}>
                               <input
@@ -309,7 +296,6 @@ const Filter = observer(() => {
                      })}
                   </div>
                </div>
-
             </div>
 
             <button

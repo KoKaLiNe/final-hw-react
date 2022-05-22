@@ -2,91 +2,96 @@ import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { AppRoute } from "../../const";
-import { editUser } from "../../api";
-import { action } from "mobx";
-import { tasksMock } from "../../moсks";
-import { users } from "../../store";
+import { action, runInAction } from "mobx";
+import { users, tasks } from "../../store";
+import { api } from "../../api";
 
-const Modal = observer(({ isVisible = false, onClose, tasks, loggedUser, userPassword }) => {
+const Modal = observer(({ isVisible = false, onClose, setComments }) => {
 
     const { pathname } = useLocation();
     const { id } = useParams();
 
     let currentUser;
-    let currentTask;
-
-    if (pathname === `${AppRoute.USER_LIST}/${id}`) {
-        if (users.data.find(x => x.id === id) === undefined) {
-            currentUser = tasksMock
-        } else {
-            currentUser = users.data.find(x => x.id === id)
-        }
-    } else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
-
-        if (tasks.find(x => x.id === id) === undefined) {
-            currentTask = tasksMock
-        } else {
-            currentTask = tasks.find(x => x.id === id)
-        }
+    if (pathname === `${AppRoute.USER_LIST}/${id}` && users.data.find(x => x.id === id) === undefined) {
+        currentUser = tasks.mock
+    } else {
+        currentUser = users.data.find(x => x.id === id)
     }
 
-
-    // console.log("currentUser", currentUser)
-    // console.log("currentTask", currentTask)
-
-
-    // const [loggedUser, setLoggedUser] = useState({
-    //     id: ""
-    // })
-
-    // if ((loggedUser.id === "") && (localStorage.length > 0)) {
-    //     setLoggedUser(JSON.parse(localStorage.getItem("loggedUserInfo")))
-    // }
-
-    // console.log("loggedUser", loggedUser)
-    // console.log("localStorage", localStorage.getItem("loggedUserInfo",))
-
+    // Форма редактирования пользователя
     const [userForm, setUserForm] = useState({
         username: (pathname === `${AppRoute.USER_LIST}/${id}` && currentUser.username),
         about: (pathname === `${AppRoute.USER_LIST}/${id}` && currentUser.about),
         photoUrl: (pathname === `${AppRoute.USER_LIST}/${id}` && currentUser.photoUrl),
 
     })
-    const [timeForm, setTimeForm] = useState({
-        timeInMinutes: (pathname === `${AppRoute.TASK_LIST}/${id}` && currentTask.timeInMinutes),
-        // comment:(pathname === `${AppRoute.TASK_LIST}/${id}` && currentTask.comment),
-        // currentUser: (pathname === `${AppRoute.TASK_LIST}/${id}` && currentTask.currentUser)
-    })
 
-    // console.log(currentTask.timeInMinutes)
+    // Форма учета времени
+    const [timeForm, setTimeForm] = useState({
+        timeInMinutes: (pathname === `${AppRoute.TASK_LIST}/${id}` && ""),
+        timeUnit: (pathname === `${AppRoute.TASK_LIST}/${id}` && "minute"),
+        comment: (pathname === `${AppRoute.TASK_LIST}/${id}` && ""),
+        currentUser: users.loggedUser.id
+    })
 
     const handleFieldChange = action((e) => {
         if (pathname === `${AppRoute.USER_LIST}/${id}`) {
             const { name, value } = e.target;
             setUserForm({ ...userForm, [name]: value })
-
-        } else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
+        }
+        else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
             const { name, value } = e.target;
             setTimeForm({ ...timeForm, [name]: value })
         }
     })
 
-    const handleSubmit = action(() => {
+    async function handleSubmit(e) {
+        e.preventDefault()
+        // Отправка формы редактирования пользователя
         if (pathname === `${AppRoute.USER_LIST}/${id}`) {
-            users.editUser({
-                "id": loggedUser.id,
-                "login": loggedUser.login,
-                "username": userForm.username,
-                "about": userForm.about,
-                "photoUrl": `${userForm.photoUrl}`,
-                "password": `${userPassword}`
-            });
+            runInAction(() => {
+                users.editUser({
+                    "id": users.loggedUser.id,
+                    "login": users.loggedUser.login,
+                    "username": userForm.username,
+                    "about": userForm.about,
+                    "photoUrl": `${userForm.photoUrl}`,
+                    "password": JSON.parse(localStorage.getItem("userPassword"))
+                });
+                users.loggedUser.username = userForm.username;
+                users.loggedUser.photoUrl = `${userForm.photoUrl}`;
+                users.loggedUser.about = userForm.about;
+            })
             onClose();
         }
+        // Отправка формы учета времени
+        else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
+            if (timeForm.timeUnit === "minute") {
+                await tasks.addWorktime(id, {
+                    "timeInMinutes": timeForm.timeInMinutes,
+                    "comment": timeForm.comment,
+                    "currentUser": users.loggedUser.id
+                });
+            } else if (timeForm.timeUnit === "hour") {
+                await tasks.addWorktime(id, {
+                    "timeInMinutes": timeForm.timeInMinutes * 60,
+                    "comment": timeForm.comment,
+                    "currentUser": users.loggedUser.id
+                });
+            } else if (timeForm.timeUnit === "day") {
+                await tasks.addWorktime(id, {
+                    "timeInMinutes": timeForm.timeInMinutes * 60 * 24,
+                    "comment": timeForm.comment,
+                    "currentUser": users.loggedUser.id
+                });
+            }
+            await api.getComments(id).then((data) => setComments(data));
+            onClose()
+        }
+    }
 
-    })
-
-    if (isVisible && pathname === `${AppRoute.USER_LIST}/${id}` && loggedUser.id) {
+    // Модальное окно
+    if (isVisible && pathname === `${AppRoute.USER_LIST}/${id}` && users.loggedUser.id) {
         return (
             <>
                 <div className="modal" onClick={onClose}>
@@ -98,7 +103,10 @@ const Modal = observer(({ isVisible = false, onClose, tasks, loggedUser, userPas
                         </div>
                         <div className="modal__body">
                             <div className="modal__content">
-                                <fieldset className="modal__field  field">
+                                <form
+                                    className="modal__field  field"
+                                    id="user-edit-form"
+                                    onSubmit={handleSubmit}>
                                     <label
                                         htmlFor="username"
                                         className="label__modal  label"
@@ -113,7 +121,6 @@ const Modal = observer(({ isVisible = false, onClose, tasks, loggedUser, userPas
                                         defaultValue={userForm.username}
                                         required
                                     ></textarea>
-
                                     <label
                                         htmlFor="urlpicture"
                                         className="label__modal  label"
@@ -141,18 +148,16 @@ const Modal = observer(({ isVisible = false, onClose, tasks, loggedUser, userPas
                                         name="about"
                                         placeholder="Расскажите о себе"
                                         defaultValue={userForm.about}
-                                        required
                                     ></textarea>
-
-                                </fieldset>
+                                </form>
                             </div>
                         </div>
                         <div className="modal__footer">
                             <div className="modal__footer-buttnos">
                                 <button
                                     typeof="submit"
-                                    onClick={handleSubmit}
-                                    className="btn-board__header  btn-primary  btn">
+                                    className="btn-board__header  btn-primary  btn"
+                                    form="user-edit-form">
                                     Добавить
                                 </button>
                                 <button
@@ -167,7 +172,6 @@ const Modal = observer(({ isVisible = false, onClose, tasks, loggedUser, userPas
                 </div>
             </>
         )
-
     } else if (isVisible && pathname === `${AppRoute.TASK_LIST}/${id}`) {
         return (
             <>
@@ -180,7 +184,11 @@ const Modal = observer(({ isVisible = false, onClose, tasks, loggedUser, userPas
                         </div>
                         <div className="modal__body">
                             <div className="modal__content">
-                                <fieldset className="modal__field  field">
+                                <form
+                                    className="modal__field  field"
+                                    id="add-work-time-form"
+                                    onSubmit={handleSubmit}
+                                >
                                     <label
                                         htmlFor="timeInMinutes"
                                         className="label__modal  label"
@@ -204,17 +212,19 @@ const Modal = observer(({ isVisible = false, onClose, tasks, loggedUser, userPas
                                     <select
                                         className="modal__select  select"
                                         onChange={handleFieldChange}
-                                        // defaultValue={}
-                                        name="timeUnit">
-                                        <option
-                                            value="day"
-                                        >День</option>
-                                        <option
-                                            value="hour"
-                                        >Час</option>
+                                        name="timeUnit"
+                                        defaultValue={timeForm.timeUnit}
+                                    >
                                         <option
                                             value="minute"
+                                            defaultChecked
                                         >Минуты</option>
+                                        <option
+                                            value="hour"
+                                        >Часы</option>
+                                        <option
+                                            value="day"
+                                        >Дни</option>
                                     </select>
 
                                     <label
@@ -226,19 +236,17 @@ const Modal = observer(({ isVisible = false, onClose, tasks, loggedUser, userPas
                                         typeof="text"
                                         onChange={handleFieldChange}
                                         className="input__modal-comment  input"
-                                        name="title"
+                                        name="comment"
                                         placeholder="Добавьте комментарий"
-                                    // defaultValue={}
+                                        defaultValue={timeForm.comment}
                                     ></textarea>
-
-                                </fieldset>
+                                </form>
                             </div>
                         </div>
                         <div className="modal__footer">
                             <div className="modal__footer-buttnos">
                                 <button
-                                    to={`/`}
-                                    onClick={handleSubmit}
+                                    form="add-work-time-form"
                                     className="btn-board__header  btn-primary  btn">
                                     Добавить
                                 </button>

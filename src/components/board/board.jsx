@@ -1,18 +1,16 @@
 import React from "react";
 import { AppRoute } from "../../const";
-import { useLocation, useParams, Link } from "react-router-dom";
+import { useLocation, useHistory, useParams, Link } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { action } from "mobx";
+import { tasks, users } from "../../store";
 import TaskStatus from "../taskStatus/taskStatus";
 import TaskCard from "../taskCard/taskCard";
 import UserCard from "../userCard/userCard";
 import EditForm from "../editForm/editForm";
 import TasksList from "../tasksList/tasksList";
 import UsersList from "../usersList/usersList";
-import { tasksMock } from "../../moсks";
-import { observer } from "mobx-react-lite";
-import { api } from "../../api";
-import { useHistory } from "react-router-dom";
-import { tasks, users } from "../../store";
-import { action, runInAction } from "mobx";
+import StatusBtn from "../statusBtn/statusBtn";
 
 const Board = observer(() => {
 
@@ -22,7 +20,6 @@ const Board = observer(() => {
     const hist = useHistory();
 
     // СПИСОК ЗАДАЧ
-
     if (pathname === AppRoute.TASK_LIST) {
         return (
             <>
@@ -32,22 +29,13 @@ const Board = observer(() => {
     }
 
     // ВЫБРАННАЯ ЗАДАЧА
-
     else if (pathname === `${AppRoute.TASK_LIST}/${id}`) {
 
-        // const currentTask = () => {
-        //     if (tasks.find(x => x.id === id) === undefined) {
-        //         return (tasksMock);
-        //     } else {
-        //         return tasks.find(x => x.id === id);
-        //     }
-        // }
-        
         let currentTask;
-        if (tasks.data.find(x => x.id === id) === undefined) {
-            currentTask = tasksMock
+        if (tasks.data.find(task => task.id === id) === undefined) {
+            currentTask = tasks.mock
         } else {
-            currentTask = tasks.data.find(x => x.id === id)
+            currentTask = tasks.data.find(task => task.id === id)
         }
 
         const handleDelete = action(() => {
@@ -58,17 +46,16 @@ const Board = observer(() => {
         return (
             <>
                 <section className="board">
-
                     <div className="board__header  task-header">
                         <div className="board__header-title  task-title">
-                            <h2 className="board__header-text">{currentTask.title}</h2>
+                            <h2
+                                className="board__header-text"
+                                title={`${currentTask.title}`}
+                            >{currentTask.title}</h2>
                             <TaskStatus status={currentTask.status} />
                         </div>
-
                         <div className="board__header-btns">
-                            <button className="btn-board__header  btn">
-                                Взять в работу
-                            </button>
+                            <StatusBtn id={id} />
                             <Link
                                 to={`/edit/${id}`}
                                 className="btn-board__header  btn-primary  btn">
@@ -82,20 +69,17 @@ const Board = observer(() => {
                             </button>
                         </div>
                     </div>
-
                     <section className="board__content">
                         <section className="card">
                             <TaskCard tasks={tasks.data} users={users.data} />
                         </section>
                     </section>
-
                 </section>
             </>
         )
     }
 
     // СПИСОК ПОЛЬЗОВАТЕЛЕЙ
-
     else if (pathname === AppRoute.USER_LIST) {
 
         return (
@@ -106,7 +90,6 @@ const Board = observer(() => {
     }
 
     // ВЫБРАННЫЙ ПОЛЬЗОВАТЕЛЬ
-
     else if (pathname === `${AppRoute.USER_LIST}/${id}`) {
         return (
             <>
@@ -117,15 +100,30 @@ const Board = observer(() => {
         )
     }
 
-    // ДОБАВЛЕНИЕ ЗАДАЧ
+    // РЕДАКТИРОВАНИЕ ЗАДАЧ
+    else if (pathname === `${AppRoute.ADD}/${id}`) {
 
-    else if (pathname === AppRoute.ADD || pathname === `${AppRoute.ADD}/${id}` || pathname === `${AppRoute.USER_LIST}/${userid}/add`) {
+        const currentTask = tasks.data.find(task => task.id === id)
+        const currentUser = users.data.find(user => user.id === userid)
+
+        if (currentTask || currentUser) {
+            return (
+                <>
+                    <section className="board">
+                        <EditForm currentTask={currentTask} currentUser={currentUser} userId={userid} />
+                    </section>
+                </>
+            )
+        }
+    }
+
+    // ДОБАВЛЕНИЕ ЗАДАЧИ
+    else if (pathname === AppRoute.ADD || pathname === `${AppRoute.USER_LIST}/${userid}/add`) {
+
         return (
             <>
                 <section className="board">
-                    <EditForm
-                        userId={userid}
-                    />
+                    <EditForm userId={userid} />
                 </section>
             </>
         )

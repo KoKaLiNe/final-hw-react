@@ -5,34 +5,34 @@ import { Link, useParams } from "react-router-dom";
 import { AppRoute } from "../../const";
 import Modal from "../modal/modal";
 import { observer } from "mobx-react-lite";
-import { tasks } from "../../store";
-import { tasksMock } from "../../moсks";
+import { tasks, users } from "../../store";
 
 
-const UserCard = observer(({ users }) => {
+const UserCard = observer(() => {
 
-    const [loggedUser, setLoggedUser] = useState("")
-    const [userPassword, seUserPassword] = useState("")
-    if ((loggedUser === "") && (localStorage.length > 0)) {
-        setLoggedUser(JSON.parse(localStorage.getItem("loggedUserInfo")))
-        seUserPassword(JSON.parse(localStorage.getItem("userPassword")))
-    }
     const { id } = useParams();
+    
+    const [loggedUser, setLoggedUser] = useState([])
+
+    if ((loggedUser.length === 0) && (localStorage.length > 0)) {
+        setLoggedUser(JSON.parse(localStorage.getItem("loggedUserInfo")));
+    }
 
     let currentUser;
-    if (users.find(x => x.id === id) === undefined) {
-        currentUser = tasksMock
+
+    if (users.data.find(x => x.id === id) === undefined) {
+        currentUser = tasks.mock
     } else {
-        currentUser = users.find(x => x.id === id);
+        currentUser = users.data.find(x => x.id === id);
     }
 
+    // Пагинация
     const [startStep, setStartStep] = useState(1)
     const [endStep, setEndStep] = useState(10)
     const [currentPage, setCurrentPage] = useState(1);
     const arrayLength = tasks.currentUserTasks.filter(x => x.assignedId === id).length
+    
     const [isModal, setModal] = useState(false);
-
-    // console.log(tasks.currentUserTasks.filter(x => x.assignedId === id))
 
     const props = {
         arrayLength,
@@ -43,7 +43,7 @@ const UserCard = observer(({ users }) => {
         currentPage,
         setCurrentPage
     }
-    
+
     const setDefaulUserPic = () => {
         if ((currentUser.photoUrl === null) || currentUser.photoUrl === undefined) {
             return ("../img/defualt-user-icon.png")
@@ -55,7 +55,6 @@ const UserCard = observer(({ users }) => {
     return (
         <>
             <div className="board__header">
-
                 <h2 className="board__header-title  user-title">{currentUser.username}</h2>
                 <div className="board__header-btns">
                     <Link to={`${AppRoute.USER_LIST}/${id}/add`}
@@ -70,9 +69,7 @@ const UserCard = observer(({ users }) => {
                     </button>
                 </div>
             </div>
-
             <section className="board__content">
-
                 <div className="card__wrap">
                     <div className="card__col  col-1">
                         <div className="card__user-img-wrapper  ">
@@ -91,9 +88,7 @@ const UserCard = observer(({ users }) => {
                         </div>
                         <Pagination props={props} />
                     </div>
-
                 </div>
-
             </section>
 
             <Modal
@@ -101,10 +96,8 @@ const UserCard = observer(({ users }) => {
                 title="Редактирование пользователя"
                 onClose={() => setModal(false)}
                 loggedUser={loggedUser}
-                userPassword={userPassword}
                 users={users}
                 tasks={tasks.data}
-                
             />
         </>
     )

@@ -1,125 +1,69 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import { getTasks, getUsers, addTask, deleteTask, editUser } from '../api'
+import { makeAutoObservable } from 'mobx';
 import { api } from '../api' //AXIOS
 
 
-// НОВЫЕ СТОРЫ
-
-// class TasksStore2 {
-//     data = [];
-//     currentUserTasks = [];
-
-//     filter = {};
-//     page = 0;
-//     limit = 0;
-
-
-//     constructor() {
-//         makeAutoObservable(this, {}, {
-//             autoBind: true,
-//         });
-//     }
-
-//     *fetch() {
-//         const response = yield getTasks(this.filter, this.page, this.limit);
-//         this.data = response.data;
-//         this.currentUserTasks = response.data;
-
-//         // this.data = response.data.map(task => new TaskStore(task));
-//         // this.currentUserTasks = response.data.map(task => new TaskStore(task));
-//     }
-
-//     *addTask(data) {
-//         yield addTask(data)
-//         yield this.fetch();
-//     }
-
-//     *deleteTask(data) {
-//         yield deleteTask(data)
-//         yield this.fetch();
-//     }
-
-
-
-//     // constructor() {
-//     //     makeAutoObservable(this, {}, {
-//     //         autoBind: true,
-//     //     });
-//     // }
-
-//     // fetchAsyncTasks() {
-//     //     return api.getAsyncTasks(this.filter, this.page, this.limit)
-//     //         .then((response) => {
-//     //             runInAction(() => {
-//     //                 this.data = response.data;
-//     //                 this.currentUserTasks = response.data;
-//     //             })
-
-//     //         })
-//     // }
-// }
-// export const tasks2 = new TasksStore2();
-// class UsersStore2 {
-//     data = [];
-//     loggedUser = null;
-
-//     constructor() {
-//         makeAutoObservable(this, {}, {
-//             autoBind: true,
-//         });
-//     }
-
-//     fetchAsyncUsers() {
-//         return api.getAsyncUsers()
-//             .then(({ data }) => {
-//                 this.data = data;
-//             })
-//     }
-
-// }
-// export const users2 = new UsersStore2();
-
-
-
-
-
 // ЗАДАЧИ
-
-// class TaskStore {
-//     id;
-//     userId = '';
-//     assignedId = '';
-//     title = '';
-//     description = '';
-//     type = 'task';
-//     dateOfCreation = new Date();
-//     dateOfUpdate = new Date();
-//     timeInMinutes = 0;
-//     status = 'opened';
-//     rank = 'low'
-
-//     constructor({ id, userId, assignedId, title, description, type, dateOfCreation, dateOfUpdate, timeInMinutes, status, rank }) {
-//         makeAutoObservable(this, {}, {
-//             autoBind: true
-//         });
-
-//         this.id = id;
-//         this.userId = userId;
-//         this.assignedId = assignedId;
-//         this.title = title;
-//         this.description = description;
-//         this.type = type;
-//         this.dateOfCreation = dateOfCreation;
-//         this.dateOfUpdate = dateOfUpdate;
-//         this.timeInMinutes = timeInMinutes;
-//         this.status = status;
-//         this.rank = rank;
-//     }
-// }
-
 class TasksStore {
     data = [];
     currentUserTasks = [];
+    mock = [
+        {
+            id: "...",
+            userId: "...",
+            assignedId: "(не указн)",
+            username: "(не указн)",
+            title: "загружаем...",
+            description: "загружаем...",
+            type: "task",
+            dateOfCreation: new Date(),
+            dateOfUpdate: new Date(),
+            timeInMinutes: 0,
+            status: "opened",
+            rank: "low",
+        }
+    ]
+    type = [
+        {
+            name: "Задача",
+            value: "task"
+        },
+        {
+            name: "Ошибка",
+            value: "bug"
+        }
+    ];
+    status = [
+        {
+            name: "Открыто",
+            value: "opened"
+        },
+        {
+            name: "В работе",
+            value: "inProgress"
+        },
+        {
+            name: "Тестирование",
+            value: "testing"
+        },
+        {
+            name: "Сделано",
+            value: "complete"
+        },
+    ]
+    rank = [
+        {
+            name: "Низкий",
+            value: "low"
+        },
+        {
+            name: "Средний",
+            value: "medium"
+        },
+        {
+            name: "Высокий",
+            value: "high"
+        },
+    ]
 
     filter = {};
     page = 0;
@@ -130,28 +74,6 @@ class TasksStore {
             autoBind: true,
         });
     }
-
-    // fetchAsyncTasks() {
-    //     return api.getAsyncTasks(this.filter, this.page, this.limit)
-    //         .then((response) => {
-    //             runInAction(() => {
-    //                 this.data = response.data.data;
-    //                 this.currentUserTasks = response.data.data;
-    //             })
-
-    //         })
-    // }
-
-    // addTask(data) {
-    //     return api.addAsyncTask(data)
-    //         .then((response) =>
-    //             runInAction(() => {
-    //                 this.data = response.data.data;
-    //                 this.currentUserTasks = response.data.data;
-    //             })
-    //         )
-    // }
-
 
     *fetch() {
         const response = yield api.getTasks(this.filter, this.page, this.limit);
@@ -174,15 +96,32 @@ class TasksStore {
         yield this.fetch();
     }
 
+    *addWorktime(taskId, data) {
+        yield api.addWorktime(taskId, data)
+        yield this.fetch();
+    }
 }
 
 export const tasks = new TasksStore();
 
 
 // ПОЛЬЗОВАТЕЛИ
-
 class UsersStore {
     data = [];
+    mock = [
+        {
+            id: "6273dca5d09b551dca87629c",
+            login: "загружаем...",
+            password: "загружаем...",
+            username: "загружаем...",
+            about: "загружаем...",
+            photoUrl: ""
+        }
+    ];
+
+    loggedUser = [];
+    error = null;
+    password = null;
 
     constructor() {
         makeAutoObservable(this, {}, {
@@ -198,6 +137,11 @@ class UsersStore {
     *editUser(data) {
         yield api.editUser(data)
         yield this.fetch();
+    }
+
+    *fetchLoggedUser(id) {
+        const response = yield api.getLoggedUser(id);
+        this.loggedUser = response.data;
     }
 }
 

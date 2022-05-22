@@ -8,12 +8,8 @@ const UserItem = observer(({ id, username }) => {
     return (
         <>
             <div className="board__item">
-                <div className="user__name"
-                >
-                    <Link
-                        to={`${AppRoute.USER_LIST}/${id}`}>
-                        {username}
-                    </Link>
+                <div className="user__name">
+                    <Link to={`${AppRoute.USER_LIST}/${id}`}> {username} </Link>
                 </div>
             </div>
         </>

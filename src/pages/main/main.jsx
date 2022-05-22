@@ -4,15 +4,12 @@ import Board from "../../components/board/board";
 import { observer } from "mobx-react-lite";
 
 const Main = observer(({ tasks, users }) => {
-  
-        return (
-            <>
+
+    return (
+        <>
             <Header />
             <section className="main__wrapper">
-                <Board
-                    tasks={tasks}
-                    users={users}
-                    />
+                <Board tasks={tasks} users={users} />
             </section>
         </>
     )
