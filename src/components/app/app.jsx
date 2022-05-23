@@ -34,7 +34,7 @@ const App = observer(() => {
                 </section>
                 <section className="main__wrapper">
                     <div className='main__error'>
-                        <img src="../../img/icons/load-spinner.gif" alt="" width="64" height="64" />
+                        <img src="../final-hw-react/img/icons/load-spinner.gif" alt="" width="64" height="64" />
                     </div>
                 </section>
             </>
@@ -45,6 +45,9 @@ const App = observer(() => {
             <BrowserRouter>
                 <Switch>
                     <Route path="/" exact>
+                        <Redirect to={AppRoute.LOGIN} />
+                    </Route>
+                    <Route path="/final-hw-react" exact>
                         <Redirect to={AppRoute.LOGIN} />
                     </Route>
                     <Route path={AppRoute.LOGIN} exact>
